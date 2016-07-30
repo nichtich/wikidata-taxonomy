@@ -1,6 +1,6 @@
 {
   "name": "wikidata-taxonomy",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "command line tool to extract taxonomies from Wikidata",
   "author": "Jakob Voß",
   "license": "MIT",

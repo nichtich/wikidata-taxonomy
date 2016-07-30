@@ -66,8 +66,12 @@ function sparqlRequest(sparql, success) {
         error(err)
     } else {
       results = res.body
-      results = wdk.simplifySparqlResults(results)
-      success(results)
+      try { // TODO: fix bug? in wikidata-sdk
+        results = wdk.simplifySparqlResults(results)
+        success(results)
+      } catch(err) {
+        error("no taxonomy found")
+      }
     }
   })
 }
@@ -137,13 +141,15 @@ function printCSV( graph, id, depth ) {
 
   var narrower = graph.edges[id] || []
 
-  narrower.sort().forEach(function(child) { 
+  narrower.sort(function(x,y){
+    return x.substr(1) - y.substr(1)
+  }).forEach(function(child) { 
     printCSV(graph, child, depth+1); 
   });
 }
 
 program
-  .version('0.0.0')
+  .version('0.1.0')
   .arguments('<id>')
   .option('-l, --language [code]', 'language to get labels in')
   .description('extract taxonomies from Wikidata')
