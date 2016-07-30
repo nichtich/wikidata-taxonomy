@@ -90,7 +90,8 @@ function makeTree(results) {
     row.broader = []
 
     if (!items[qid]) {
-      row.label = row.item.label || row.item.value
+      row.label = row.item.label || ""
+      if (row.label == row.item.value) row.label = ""
       delete row.item
       items[qid] = row
     }
