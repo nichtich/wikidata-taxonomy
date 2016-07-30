@@ -20,27 +20,57 @@ This module provides the command `wdtaxonomy`. By default, a usage help is print
 
 ```sh
 $ wdtaxonomy
-
 ```
 
 The first arguments needs to be a Wikidata identifier to be used as root. For
-instance extract a taxonomy of bridges ([Q12280](https://www.wikidata.org/wiki/Q12280):
+instance extract a taxonomy of planets ([Q634](https://www.wikidata.org/wiki/Q634)):
 
 ```sh
-$ wdtaxonomy Q12280 
+$ wdtaxonomy Q634
 ```
 
-The output is a CSV format based on statements using the subclass-of property
-([P279](https://www.wikidata.org/wiki/Property:P279)).
+The output is a CSV format optimized for comparing differences in time. The
+taxonomy is based on statements using the subclass-of property
+([P279](https://www.wikidata.org/wiki/Property:P279)). Each output row consists
+of five fields:
 
-* **level** in the hierarchy indicated by zero or more `*` (default) or `+` 
+* **level** in the hierarchy indicated by zero or more "`*`" (default) or "`+`" 
   characters (multihierarchy).
-* **id** of the item
+
+* **id** of the item. Items on the same level are sorted by their id.
+
 * **label** of the item. Language can be selected with option `--language`.
   The character `,` in labels is replaces by a whitespace.
+
 * **sites**: number of connected sites (Wikipedia and related project editions).
   Larger numbers may indicate more established concepts.
-* **parents** outside of the hierarchy, indicated by zero or more `^` characters
+
+* **parents** outside of the hierarchy, indicated by zero or more "`^`" characters.
+
+For instance the CSV output for [Q634](https://www.wikidata.org/wiki/Q634) would be
+like this:
+
+```csv
+level,id,label,sites,instances,parents
+,Q634,planet,196,7,^
+*,Q44559,extrasolar planet,81,832,^
+**,Q205901,circumbinary planet,14,10,
+**,Q327757,super-Earth,32,46,
+...
+*,Q128207,terrestrial planet,67,7,
+++,Q327757,super-Earth,32,46,
+...
+
+```
+
+In this example there are 196 Wikipedia editions or other sites with an article
+about planets and seven Wikidata items are direct instance of
+([P31](https://www.wikidata.org/wiki/P31)) a planet. At the end of the line
+"`^`" indicates that "planet" has one superclass. In the next rows "extrasolar
+planet" ([Q44559](https://www.wikidata.org/wiki/Q44559) is a subclass of planet
+with another superclass indicated by "`^`". Both "circumbinary planet" and
+"super-Earth" are subclasses of "extrasolar planet". The latter also occurs as
+sublass of "terrestrial planet" where it is marked by "`++`" instead of "`**`".
 
 ## See Also
 
