@@ -29,10 +29,12 @@ instance extract a taxonomy of planets ([Q634](https://www.wikidata.org/wiki/Q63
 $ wdtaxonomy Q634
 ```
 
-The output is a CSV format optimized for comparing differences in time. The
-taxonomy is based on statements using the subclass-of property
-([P279](https://www.wikidata.org/wiki/Property:P279)). Each output row consists
-of five fields:
+The extracted taxonomy is based on statements using the subclass-of property
+([P279](https://www.wikidata.org/wiki/Property:P279)) and additional statistics.
+Option `--sparql` print the SPARQL query that is used.
+
+The default output is a CSV format optimized for comparing differences in time.
+Each output row consists of five fields:
 
 * **level** in the hierarchy indicated by zero or more "`*`" (default) or "`+`" 
   characters (multihierarchy).
@@ -67,7 +69,7 @@ In this example there are 196 Wikipedia editions or other sites with an article
 about planets and seven Wikidata items are direct instance of
 ([P31](https://www.wikidata.org/wiki/P31)) a planet. At the end of the line
 "`^`" indicates that "planet" has one superclass. In the next rows "extrasolar
-planet" ([Q44559](https://www.wikidata.org/wiki/Q44559) is a subclass of planet
+planet" ([Q44559](https://www.wikidata.org/wiki/Q44559)) is a subclass of planet
 with another superclass indicated by "`^`". Both "circumbinary planet" and
 "super-Earth" are subclasses of "extrasolar planet". The latter also occurs as
 sublass of "terrestrial planet" where it is marked by "`++`" instead of "`**`".

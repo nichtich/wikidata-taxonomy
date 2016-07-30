@@ -152,15 +152,20 @@ program
   .version('0.1.0')
   .arguments('<id>')
   .option('-l, --language [code]', 'language to get labels in')
+  .option('-s, --sparql', 'print SPARQL query and exit')
   .description('extract taxonomies from Wikidata')
   .action(function(id, env) {
     id = normalizeId(id)
 	lang = env.language || 'en' // TOOD: get from POSIX?
 	sparql = sparqlQuery(id, lang)
-	sparqlRequest(sparql, function(results) {
-	  graph = makeTree(results)
-      printCSV(graph, id, 0)    // TODO: additional output formats
-    })
+    if (env.sparql) {
+      process.stdout.write(sparql)
+    } else {
+      sparqlRequest(sparql, function(results) {
+	    graph = makeTree(results)
+        printCSV(graph, id, 0)    // TODO: additional output formats
+      })
+    }
   })
   .parse(process.argv)
 
