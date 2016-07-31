@@ -91,13 +91,17 @@ function makeTree(results) {
         edges[broader] = [qid]
       }
     }
-    row.broader = []
 
     if (!items[qid]) {
-      row.label = row.item.label || ""
-      if (row.label == row.item.value) row.label = ""
-      delete row.item
-      items[qid] = row
+      item = {
+        label:     row.item.label || "",
+        parents:   1*row.parents,
+        instances: 1*row.instances,
+        sites:     1*row.sites,
+        broader:   []
+      }
+      if (item.label == row.item.value) item.label = ""
+      items[qid] = item
     }
   })
 
@@ -121,7 +125,7 @@ function printCSV( graph, id, depth ) {
     process.stdout.write("level,id,label,sites,instances,parents\n")
   }
 
-  var parents = 1*node.parents
+  var parents = node.parents
   node.broader.forEach(function(node) {
     if (graph.items[node]) parents--
   })
