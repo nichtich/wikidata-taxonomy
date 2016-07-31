@@ -68,27 +68,28 @@ function sparqlRequest(sparql, success) {
       results = res.body
       try { // TODO: fix bug? in wikidata-sdk
         results = wdk.simplifySparqlResults(results)
-        success(results)
       } catch(err) {
-        error("no taxonomy found")
+        error("no taxonomy found"+err)
       }
+      success(results)
     }
   })
 }
 
 function makeTree(results) {
-  var edges = {}
-  var items = {}
+  var items    = {}
+  var narrower = {}
+  var broader  = {}
 
   results.forEach(function(row) {
-    var qid     = row.item.value
-    var broader = row.broader
+    var qid       = row.item.value
+    var broaderId = row.broader
 
-    if (broader) {
-      if (edges[broader]) {
-        edges[broader].push(qid)
+    if (broaderId) {
+      if (narrower[broaderId]) {
+        narrower[broaderId].push(qid)
       } else {
-        edges[broader] = [qid]
+        narrower[broaderId] = [qid]
       }
     }
 
@@ -104,14 +105,58 @@ function makeTree(results) {
       items[qid] = item
     }
   })
-
-  for (var broader in edges) {
-    edges[broader].forEach(function(narrower) {
-      items[narrower].broader.push(broader)
+      
+  for (var id in narrower) {
+    // sort child nodes by Wikidata id
+    narrower[id] = narrower[id].sort(function(x,y) {
+      return x.substr(1) - y.substr(1)
+    })
+    // add reverse
+    narrower[id].forEach(function(b) {
+      if (!broader[b]) broader[b] = []
+      broader[b].push(id)
     })
   }
 
-  return { items: items, edges: edges }
+  for (var id in items) {
+    var item = items[id]
+    item.otherparents = item.parents
+    broader[id].forEach(function(node) {
+      if (items[node]) item.otherparents--
+    })
+  }
+
+  return { items: items, narrower: narrower, broader: broader }
+}
+
+// print taxonomy in CSV format
+function printTree( graph, id, depth ) {
+  var node = graph.items[id];
+  if (!node) return 
+
+  var label     = node.label == "" ? "???" : node.label
+  var sites     = node.sites ? ' •' + node.sites : ''
+  var instances = node.instances ? ' ×' + node.instances : ''
+  var parents   = Array(node.otherparents+1).join('^')
+  var narrower  = graph.narrower[id] || []
+
+  var row = label + ` (${id})`
+  row += `${sites}${instances} ${parents}`
+  if (node.visited + narrower.length) row += " …"
+  process.stdout.write(row+"\n")
+  if (node.visited) return;
+  node.visited = true;
+
+  for(var i=0; i<narrower.length; i++) {
+    var last = (i == narrower.length-1)
+    if (graph.items[narrower[i]].visited) { 
+      prefix = last ? '╘══' : '╞══'
+    } else {
+      prefix = last ? '└──' : '├──'
+    }
+    process.stdout.write(depth + prefix)
+    printTree(graph, narrower[i], depth + (last ? '   ' : '|  ')); 
+  }
 }
 
 // print taxonomy in CSV format
@@ -125,29 +170,21 @@ function printCSV( graph, id, depth ) {
     process.stdout.write("level,id,label,sites,instances,parents\n")
   }
 
-  var parents = node.parents
-  node.broader.forEach(function(node) {
-    if (graph.items[node]) parents--
-  })
-
   var row = [
     Array(depth+1).join( node.visited ? '+' : '*' ),
     id,
     label,
     node.sites,
     node.instances,
-    Array(parents+1).join('^')
+    Array(node.otherparents+1).join('^')
   ];
   process.stdout.write(row.join(',')+"\n")
   
   if (node.visited) return;
   node.visited = true;
 
-  var narrower = graph.edges[id] || []
-
-  narrower.sort(function(x,y){
-    return x.substr(1) - y.substr(1)
-  }).forEach(function(child) { 
+  var narrower = graph.narrower[id] || []
+  narrower.forEach(function(child) { 
     printCSV(graph, child, depth+1); 
   });
 }
@@ -162,13 +199,13 @@ program
   .arguments('<id>')
   .option('-l, --language [code]', 'language to get labels in')
   .option('-s, --sparql', 'print SPARQL query and exit')
-  .option('-f, --format [csv|json]', 'output format')
+  .option('-f, --format [tree|csv|json]', 'output format')
   .description('extract taxonomies from Wikidata')
   .action(function(id, env) {
     id     = normalizeId(id)
 	lang   = env.language || 'en' // TOOD: get from POSIX?
-    format = env.format || 'csv'
-    if (!format.match(/^(csv|json)$/)) {
+    format = env.format || 'tree'
+    if (!format.match(/^(tree|csv|json)$/)) {
       error("unsupported format: %s", format)
     }
 	sparql = sparqlQuery(id, lang)
@@ -180,8 +217,10 @@ program
         graph.root = id
         if (format == 'json') {
           printJSON(graph)
-        } else {
+        } else if (format == 'csv') {
           printCSV(graph, graph.root, 0)
+        } else {
+          printTree(graph, graph.root, "")
         }
       })
     }

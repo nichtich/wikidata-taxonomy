@@ -33,10 +33,44 @@ The extracted taxonomy is based on statements using the subclass-of property
 ([P279](https://www.wikidata.org/wiki/Property:P279)) and additional statistics.
 Option `--sparql` print the SPARQL query that is used.
 
-### CSV output
+### Tree format
 
-The default output is a CSV format optimized for comparing differences in time.
-Each output row consists of five fields:
+By default, the taxonomy is printed as tree with Unicode characters.
+
+```sh
+$ wdtaxonomy Q620207
+```
+```
+finger (Q620207) •46 ^
+├──thumb (Q83360) •76 
+├──middle finger (Q167131) •60 
+├──index finger (Q184848) •57 
+├──ring finger (Q192298) •51 
+└──little finger (Q228027) •55 
+```
+
+The output contains item labels, Wikidata identifiers, and the number of
+Wikimedia sites conneted to each item (indicated by bullet character "`•`"). A
+more complex example (abbreviated below) includes additional information:
+
+```sh
+$ wdtaxonomy Q634
+```
+```
+planet (Q634) •196 ×7 ^
+├──extrasolar planet (Q44559) •81 ×833 ^
+|  ├──circumbinary planet (Q205901) •14 ×10
+...
+├──terrestrial planet (Q128207) •67 ×7 
+|  ╞══super-Earth (Q327757) •32 ×46  …
+|  ╞══carbon planet (Q862203) •24  …
+...
+```
+
+### CSV format
+
+The CSV format ("`--format csv`") is optimized for comparing differences in
+time.  Each output row consists of five fields:
 
 * **level** in the hierarchy indicated by zero or more "`*`" (default) or "`+`" 
   characters (multihierarchy).
@@ -76,10 +110,10 @@ with another superclass indicated by "`^`". Both "circumbinary planet" and
 "super-Earth" are subclasses of "extrasolar planet". The latter also occurs as
 sublass of "terrestrial planet" where it is marked by "`++`" instead of "`**`".
 
-### JSON output
+### JSON format
 
 Option `--format json` enables JSON output instead of CSV. The JSON object has
-three fields "`items`", "`edges`", and "`root`".
+four fields "`items`", "`narrower`", "`broader`", and "`root`".
 
 ## See Also
 
