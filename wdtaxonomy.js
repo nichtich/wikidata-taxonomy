@@ -148,22 +148,37 @@ function printCSV( graph, id, depth ) {
   });
 }
 
+function printJSON(graph) {
+  // TODO: use canonical-json
+  process.stdout.write(JSON.stringify(graph, null, 4) + '\n')
+}
+
 program
   .version('0.1.0')
   .arguments('<id>')
   .option('-l, --language [code]', 'language to get labels in')
   .option('-s, --sparql', 'print SPARQL query and exit')
+  .option('-f, --format [csv|json]', 'output format')
   .description('extract taxonomies from Wikidata')
   .action(function(id, env) {
-    id = normalizeId(id)
-	lang = env.language || 'en' // TOOD: get from POSIX?
+    id     = normalizeId(id)
+	lang   = env.language || 'en' // TOOD: get from POSIX?
+    format = env.format || 'csv'
+    if (!format.match(/^(csv|json)$/)) {
+      error("unsupported format: %s", format)
+    }
 	sparql = sparqlQuery(id, lang)
     if (env.sparql) {
       process.stdout.write(sparql)
     } else {
       sparqlRequest(sparql, function(results) {
 	    graph = makeTree(results)
-        printCSV(graph, id, 0)    // TODO: additional output formats
+        graph.root = id
+        if (format == 'json') {
+          printJSON(graph)
+        } else {
+          printCSV(graph, graph.root, 0)
+        }
       })
     }
   })

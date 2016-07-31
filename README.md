@@ -33,6 +33,8 @@ The extracted taxonomy is based on statements using the subclass-of property
 ([P279](https://www.wikidata.org/wiki/Property:P279)) and additional statistics.
 Option `--sparql` print the SPARQL query that is used.
 
+### CSV output
+
 The default output is a CSV format optimized for comparing differences in time.
 Each output row consists of five fields:
 
@@ -73,6 +75,11 @@ planet" ([Q44559](https://www.wikidata.org/wiki/Q44559)) is a subclass of planet
 with another superclass indicated by "`^`". Both "circumbinary planet" and
 "super-Earth" are subclasses of "extrasolar planet". The latter also occurs as
 sublass of "terrestrial planet" where it is marked by "`++`" instead of "`**`".
+
+### JSON output
+
+Option `--format json` enables JSON output instead of CSV. The JSON object has
+three fields "`items`", "`edges`", and "`root`".
 
 ## See Also
 
