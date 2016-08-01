@@ -60,10 +60,10 @@ $ wdtaxonomy Q634
 planet (Q634) •196 ×7 ^
 ├──extrasolar planet (Q44559) •81 ×833 ^
 |  ├──circumbinary planet (Q205901) •14 ×10
+|  ├──super-Earth (Q327757) •32 ×46
 ...
 ├──terrestrial planet (Q128207) •67 ×7 
 |  ╞══super-Earth (Q327757) •32 ×46  …
-|  ╞══carbon planet (Q862203) •24  …
 ...
 ```
 
@@ -88,10 +88,13 @@ time.  Each output row consists of five fields:
 For instance the CSV output for [Q634](https://www.wikidata.org/wiki/Q634) would be
 like this:
 
+```sh
+$ wdtaxonomy -f csv Q634
+```
 ```csv
 level,id,label,sites,instances,parents
 ,Q634,planet,196,7,^
--,Q44559,extrasolar planet,81,832,^
+-,Q44559,extrasolar planet,81,833,^
 --,Q205901,circumbinary planet,14,10,
 --,Q327757,super-Earth,32,46,
 ...
