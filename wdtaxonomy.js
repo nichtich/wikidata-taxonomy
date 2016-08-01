@@ -171,7 +171,7 @@ function printCSV( graph, id, depth ) {
   }
 
   var row = [
-    Array(depth+1).join( node.visited ? '+' : '*' ),
+    Array(depth+1).join( node.visited ? '=' : '-' ),
     id,
     label,
     node.sites,

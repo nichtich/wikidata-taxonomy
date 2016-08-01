@@ -72,7 +72,7 @@ planet (Q634) •196 ×7 ^
 The CSV format ("`--format csv`") is optimized for comparing differences in
 time.  Each output row consists of five fields:
 
-* **level** in the hierarchy indicated by zero or more "`*`" (default) or "`+`" 
+* **level** in the hierarchy indicated by zero or more "`-`" (default) or "`=`" 
   characters (multihierarchy).
 
 * **id** of the item. Items on the same level are sorted by their id.
@@ -91,12 +91,12 @@ like this:
 ```csv
 level,id,label,sites,instances,parents
 ,Q634,planet,196,7,^
-*,Q44559,extrasolar planet,81,832,^
-**,Q205901,circumbinary planet,14,10,
-**,Q327757,super-Earth,32,46,
+-,Q44559,extrasolar planet,81,832,^
+--,Q205901,circumbinary planet,14,10,
+--,Q327757,super-Earth,32,46,
 ...
-*,Q128207,terrestrial planet,67,7,
-++,Q327757,super-Earth,32,46,
+-,Q128207,terrestrial planet,67,7,
+==,Q327757,super-Earth,32,46,
 ...
 
 ```
@@ -108,7 +108,7 @@ about planets and seven Wikidata items are direct instance of
 planet" ([Q44559](https://www.wikidata.org/wiki/Q44559)) is a subclass of planet
 with another superclass indicated by "`^`". Both "circumbinary planet" and
 "super-Earth" are subclasses of "extrasolar planet". The latter also occurs as
-sublass of "terrestrial planet" where it is marked by "`++`" instead of "`**`".
+sublass of "terrestrial planet" where it is marked by "`==`" instead of "`--`".
 
 ### JSON format
 
@@ -119,3 +119,5 @@ four fields "`items`", "`narrower`", "`broader`", and "`root`".
 
 * [wikidata-cli](https://npmjs.com/package/wikidata-cli) provide more generic
   command line tools for Wikidata
+* [taxonomy browser](http://sergestratan.bitbucket.org/) is a web application
+  based on Wikidata dumps
