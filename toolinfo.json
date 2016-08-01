@@ -1,0 +1,9 @@
+{
+  "name": "wikidata-taxonomy",
+  "title": "wdtaxonomy",
+  "description": "command line tool to extract taxonomies from Wikidata",
+  "author": "Jakob Voß",
+  "url": "https://www.npmjs.com/package/wikidata-taxonomy",
+  "keywords": "wikidata, classes",
+  "repository": "https://github.com/nichtich/wikidata-taxonomy.git"
+}
