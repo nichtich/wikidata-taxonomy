@@ -1,10 +1,13 @@
 # Wikidata-Taxonomy
 
+[![build status](https://api.travis-ci.org/nichtich/wikidata-taxonomy.svg?branch=master)](http://travis-ci.org/nichtich/wikidata-taxonomy)
+[![npm version](http://img.shields.io/npm/v/wikidata-taxonomy.svg?style=flat)](https://www.npmjs.org/package/wikidata-taxonomy)
+
 Command-line tool to extract taxonomies from [wikidata](https://wikidata.org).
 
 ## Dependencies
 
-* [NodeJs](https://nodejs.org)
+* [NodeJs](https://nodejs.org) (at least version 4)
 
 ## Installation
 
