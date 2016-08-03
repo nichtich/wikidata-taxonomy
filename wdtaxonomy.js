@@ -165,12 +165,15 @@ function printTree( graph, id, depth ) {
   var label     = node.label == "" ? "???" : node.label
   var sites     = node.sites ? ' •' + node.sites : ''
   var instances = (node.instances && !graph.instances) ? ' ×' + node.instances : ''
-  var parents   = Array(node.otherparents+1).join('^')
+  var parents   = node.otherparents ? ' ' + Array(node.otherparents+1).join('^') : ''
   var narrower  = graph.narrower[id] || []
+  var etc       = node.visited + narrower.length ? " …" : ""
 
-  var row = label + ' (' + id + ')' + sites + instances + ' ' + parents
+  var row = chalk.blue(label) 
+          + chalk.dim(' (') + chalk.green(id) + chalk.dim(')') 
+          + chalk.yellow(sites + instances)
+          + chalk.red(parents + etc)
 
-  if (node.visited + narrower.length) row += " …"
   process.stdout.write(row+"\n")
   if (node.visited) return;
   node.visited = true;
@@ -181,10 +184,15 @@ function printTree( graph, id, depth ) {
       var label  = instances[i].label == "" ? "???" : instances[i].label
       var id     = instances[i].value;
       var prefix = narrower.length ? '|' : ' ';
-      // TODO: show if instance has been visited!
+
+      var row = chalk.dim(depth + prefix)
+      // TODO: show if instance has already been visited!
       // TODO: show if instance is also a class
-      prefix += '-'
-      process.stdout.write( depth + prefix + label + " (" + id + ")\n")
+      row += chalk.dim('-')
+      row += chalk.cyan(label)
+      row += chalk.dim(' (') + chalk.green(id) + chalk.dim(')') 
+          +  "\n"
+      process.stdout.write(row)
     }
   }
 
@@ -196,7 +204,7 @@ function printTree( graph, id, depth ) {
     } else {
       prefix = last ? '└──' : '├──'
     }
-    process.stdout.write(depth + prefix)
+    process.stdout.write(chalk.dim(depth + prefix))
     printTree(graph, cur, depth + (last ? '   ' : '|  ')); 
   }
 }
