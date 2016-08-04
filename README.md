@@ -53,7 +53,7 @@ planet of the Solar System (Q17362350) •2 ^
 ```
 
 The output contains item labels, Wikidata identifiers, the number of
-Wikimedia sites conneted to each item (indicated by bullet character "`•`"),
+Wikimedia sites connected to each item (indicated by bullet character "`•`"),
 the number of instances ([property P31](https://www.wikidata.org/wiki/P31),
 indicated by a multiplication sign "`×`"), and an upwards arrow ("`↑`") as
 indicator for additional superclass not included in the tree.  
@@ -77,7 +77,7 @@ planet of the Solar System (Q17362350) •2 ^
     -Venus (Q313)
 ```
 
-Classes that ocurr at muliple places in the taxonomy (multihierarchy) are
+Classes that occur at multiple places in the taxonomy (multihierarchy) are
 marked like in the following example:
 
 ```sh
@@ -138,7 +138,7 @@ superclass. In the next rows "extrasolar planet"
 ([Q44559](https://www.wikidata.org/wiki/Q44559)) is a subclass of planet with
 another superclass indicated by "`^`". Both "circumbinary planet" and
 "super-Earth" are subclasses of "extrasolar planet". The latter also occurs as
-sublass of "terrestrial planet" where it is marked by "`==`" instead of
+subclass of "terrestrial planet" where it is marked by "`==`" instead of
 "`--`".
 
 ### JSON format
