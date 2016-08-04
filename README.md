@@ -5,6 +5,8 @@
 
 Command-line tool to extract taxonomies from [wikidata](https://wikidata.org).
 
+![](https://github.com/nichtich/wikidata-taxonomy/raw/master/wdtaxonomy-example.png)
+
 ## Dependencies
 
 * [NodeJs](https://nodejs.org) (at least version 4)
@@ -38,23 +40,45 @@ Option `--sparql` print the SPARQL query that is used.
 
 ### Tree format
 
-By default, the taxonomy is printed as tree with Unicode characters.
+By default, the taxonomy is printed in "`tree`" format with colored Unicode
+characters:
 
 ```sh
-$ wdtaxonomy Q620207
+$ wdtaxonomy Q17362350
 ```
 ```
-finger (Q620207) •46 ^
-├──thumb (Q83360) •76 
-├──middle finger (Q167131) •60 
-├──index finger (Q184848) •57 
-├──ring finger (Q192298) •51 
-└──little finger (Q228027) •55 
+planet of the Solar System (Q17362350) •2 ^
+├──outer planet (Q30014) •23 ×4 ^
+└──inner planets (Q3504248) •8 ×4 ^
 ```
 
-The output contains item labels, Wikidata identifiers, and the number of
-Wikimedia sites conneted to each item (indicated by bullet character "`•`"). A
-more complex example (abbreviated below) includes additional information:
+The output contains item labels, Wikidata identifiers, the number of
+Wikimedia sites conneted to each item (indicated by bullet character "`•`"),
+the number of instances ([property P31](https://www.wikidata.org/wiki/P31),
+indicated by a multiplication sign "`×`"), and an upwards arrow ("`↑`") as
+indicator for additional superclass not included in the tree.  
+
+Option "`--instances`" (or "`-i`") explicitly includes instances:
+
+```sh
+$ wdtaxonomy -i Q17362350
+```
+```
+planet of the Solar System (Q17362350) •2 ^
+├──outer planet (Q30014) •23 ^
+|   -Saturn (Q193)
+|   -Jupiter (Q319)
+|   -Uranus (Q324)
+|   -Neptune (Q332)
+└──inner planets (Q3504248) •8 ^
+    -Earth (Q2)
+    -Mars (Q111)
+    -Mercury (Q308)
+    -Venus (Q313)
+```
+
+Classes that ocurr at muliple places in the taxonomy (multihierarchy) are
+marked like in the following example:
 
 ```sh
 $ wdtaxonomy Q634
@@ -88,8 +112,8 @@ time.  Each output row consists of five fields:
 
 * **parents** outside of the hierarchy, indicated by zero or more "`^`" characters.
 
-For instance the CSV output for [Q634](https://www.wikidata.org/wiki/Q634) would be
-like this:
+For instance the CSV output for [Q634](https://www.wikidata.org/wiki/Q634)
+would be like this:
 
 ```sh
 $ wdtaxonomy -f csv Q634
@@ -107,14 +131,15 @@ level,id,label,sites,instances,parents
 
 ```
 
-In this example there are 196 Wikipedia editions or other sites with an article
-about planets and seven Wikidata items are direct instance of
-([P31](https://www.wikidata.org/wiki/P31)) a planet. At the end of the line
-"`^`" indicates that "planet" has one superclass. In the next rows "extrasolar
-planet" ([Q44559](https://www.wikidata.org/wiki/Q44559)) is a subclass of planet
-with another superclass indicated by "`^`". Both "circumbinary planet" and
+In this example there are 196 Wikipedia editions or other sites with an
+article about planets and seven Wikidata items are direct instance of a
+planet. At the end of the line "`^`" indicates that "planet" has one
+superclass. In the next rows "extrasolar planet"
+([Q44559](https://www.wikidata.org/wiki/Q44559)) is a subclass of planet with
+another superclass indicated by "`^`". Both "circumbinary planet" and
 "super-Earth" are subclasses of "extrasolar planet". The latter also occurs as
-sublass of "terrestrial planet" where it is marked by "`==`" instead of "`--`".
+sublass of "terrestrial planet" where it is marked by "`==`" instead of
+"`--`".
 
 ### JSON format
 
