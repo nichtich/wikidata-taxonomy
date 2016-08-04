@@ -27,25 +27,25 @@ function normalizeId(id) {
 // construct basic SPARQL query
 function mainSparqlQuery(root, language) {
 
-  var sparql = `SELECT ?item ?itemLabel ?broader ?parents ?instances ?sites 
+  var sparql = `SELECT ?item ?itemLabel ?broader ?parents ?instances ?sites
 WHERE {
-    { 
+    {
         SELECT ?item (count(distinct ?parent) as ?parents) {
             ?item wdt:P279* wd:${root}
             OPTIONAL { ?item wdt:P279 ?parent }
-        } GROUP BY ?item 
+        } GROUP BY ?item
     }
-    { 
+    {
         SELECT ?item (count(distinct ?element) as ?instances) {
             ?item wdt:P279* wd:${root}
             OPTIONAL { ?element wdt:P31 ?item }
-        } GROUP BY ?item 
+        } GROUP BY ?item
     }
-    { 
+    {
         SELECT ?item (count(distinct ?site) as ?sites) {
             ?item wdt:P279* wd:${root}
             OPTIONAL { ?site schema:about ?item }
-        } GROUP BY ?item 
+        } GROUP BY ?item
     }
     OPTIONAL { ?item wdt:P279 ?broader }
     SERVICE wikibase:label {
@@ -114,7 +114,7 @@ function makeTree(results) {
       items[qid] = item
     }
   })
-      
+    
   for (var id in narrower) {
     // sort child nodes by Wikidata id
     narrower[id] = narrower[id].sort(function(x,y) {
@@ -156,21 +156,23 @@ function makeInstances(results) {
 
   return instances
 }
- 
-// print taxonomy in CSV format
+
+// print taxonomy in tree format
 function printTree( graph, id, depth ) {
   var node = graph.items[id];
-  if (!node) return 
+  if (!node) return
 
   var label     = node.label == "" ? "???" : node.label
   var sites     = node.sites ? ' •' + node.sites : ''
-  var instances = (node.instances && !graph.instances) ? ' ×' + node.instances : ''
-  var parents   = node.otherparents ? ' ' + Array(node.otherparents+1).join('^') : ''
+  var instances = (node.instances && !graph.instances)
+                ? ' ×' + node.instances : ''
+  var parents   = node.otherparents
+                ? ' ' + Array(node.otherparents+1).join('↑') : ''
   var narrower  = graph.narrower[id] || []
   var etc       = node.visited + narrower.length ? " …" : ""
 
-  var row = chalk.blue(label) 
-          + chalk.dim(' (') + chalk.green(id) + chalk.dim(')') 
+  var row = chalk.blue(label)
+          + chalk.dim(' (') + chalk.green(id) + chalk.dim(')')
           + chalk.yellow(sites) + chalk.cyan(instances)
           + chalk.red(parents + etc)
 
@@ -181,7 +183,8 @@ function printTree( graph, id, depth ) {
   if (graph.instances) {
     var instances = graph.instances[id] || []
     for(var i=0; i<instances.length; i++) {
-      var label  = instances[i].label == "" ? "???" : instances[i].label
+      var label  = instances[i].label == ""
+                 ? "???" : instances[i].label
       var id     = instances[i].value;
       var prefix = narrower.length ? '|' : ' ';
 
@@ -190,7 +193,7 @@ function printTree( graph, id, depth ) {
       // TODO: show if instance is also a class
       row += chalk.dim('-')
       row += chalk.cyan(label)
-      row += chalk.dim(' (') + chalk.green(id) + chalk.dim(')') 
+      row += chalk.dim(' (') + chalk.green(id) + chalk.dim(')')
           +  "\n"
       process.stdout.write(row)
     }
@@ -199,20 +202,20 @@ function printTree( graph, id, depth ) {
   for(var i=0; i<narrower.length; i++) {
     var cur  = narrower[i]
     var last = (i == narrower.length-1)
-    if (graph.items[cur].visited) { 
+    if (graph.items[cur].visited) {
       prefix = last ? '╘══' : '╞══'
     } else {
       prefix = last ? '└──' : '├──'
     }
     process.stdout.write(chalk.dim(depth + prefix))
-    printTree(graph, cur, depth + (last ? '   ' : '|  ')); 
+    printTree(graph, cur, depth + (last ? '   ' : '|  '));
   }
 }
 
 // print taxonomy in CSV format
 function printCSV( graph, id, depth ) {
   var node = graph.items[id];
-  if (!node) return 
+  if (!node) return
 
   var label = node.label.replace(',',' ') // for CSV
 
@@ -229,13 +232,13 @@ function printCSV( graph, id, depth ) {
     Array(node.otherparents+1).join('^')
   ];
   process.stdout.write(row.join(',')+"\n")
-  
+
   if (node.visited) return;
   node.visited = true;
 
   var narrower = graph.narrower[id] || []
-  narrower.forEach(function(child) { 
-    printCSV(graph, child, depth+1); 
+  narrower.forEach(function(child) {
+    printCSV(graph, child, depth+1);
   });
 }
 
