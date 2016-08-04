@@ -258,7 +258,7 @@ function printGraph(graph, format) {
 }
 
 program
-  .version('0.2.1')
+  .version('0.2.2')
   .arguments('<id>')
   .option('-l, --language [code]', 'language to get labels in')
   .option('-s, --sparql', 'print SPARQL query and exit')

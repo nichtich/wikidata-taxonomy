@@ -148,6 +148,7 @@ four fields "`items`", "`narrower`", "`broader`", and "`root`".
 
 ## See Also
 
+* [wikidata-sdk](https://npmjs.com/package/wikidata-sdk) is used by this module
 * [wikidata-cli](https://npmjs.com/package/wikidata-cli) provide more generic
   command line tools for Wikidata
 * [taxonomy browser](http://sergestratan.bitbucket.org/) is a web application
