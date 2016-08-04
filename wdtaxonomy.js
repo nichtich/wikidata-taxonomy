@@ -208,7 +208,7 @@ function printTree( graph, id, depth ) {
       prefix = last ? '└──' : '├──'
     }
     process.stdout.write(chalk.dim(depth + prefix))
-    printTree(graph, cur, depth + (last ? '   ' : '|  '));
+    printTree(graph, cur, depth + (last ? '   ' : '│  '));
   }
 }
 
