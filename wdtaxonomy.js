@@ -171,7 +171,7 @@ function printTree( graph, id, depth ) {
 
   var row = chalk.blue(label) 
           + chalk.dim(' (') + chalk.green(id) + chalk.dim(')') 
-          + chalk.yellow(sites + instances)
+          + chalk.yellow(sites) + chalk.cyan(instances)
           + chalk.red(parents + etc)
 
   process.stdout.write(row+"\n")
@@ -261,8 +261,12 @@ program
   .option('-s, --sparql', 'print SPARQL query and exit')
   .option('-f, --format [tree|csv|json]', 'output format')
   .option('-i, --instances', 'include instances (only in tree format)')
+  .option('-n, --no-colors', 'disable color output')
   .description('extract taxonomies from Wikidata')
   .action(function(id, env) {
+    if (!env.colors) {
+      chalk = new chalk.constructor({enabled: false});
+    }
     id     = normalizeId(id)
 	lang   = env.language || 'en' // TOOD: get from POSIX?
     format = env.format || 'tree'
