@@ -6,21 +6,22 @@ var program = require('commander')
 var request = require('request')
 
 // print error and exit
-function error(msg) {
-  args = [].slice.call(arguments,1);
-  console.error(chalk.red(msg), args)
-  process.exit(1)
+function error(code) {
+  args = [].slice.call(arguments,1)
+  args[0] = chalk.red(args[0])
+  console.error.apply(null, args)
+  process.exit(code)
 }
 
 // normalize and check Wikidata identifier
 function normalizeId(id) {
   if (id === undefined) {
-    error("missing id argument")
+    error(1,"missing id argument")
   }
   try {
     return wdk.normalizeId(id)
   } catch (err) {
-    error("invalid id: %s", id)
+    error(1,"invalid id: %s", id)
   }
 }
 
@@ -72,14 +73,9 @@ function sparqlRequest(sparql, success) {
 
   request(url, function (err, res) {
     if (err) {
-      error(err)
+      error(2,err)
     } else {
-      results = res.body
-      try { // TODO: fix bug? in wikidata-sdk
-        results = wdk.simplifySparqlResults(results)
-      } catch(err) {
-        error("no taxonomy found"+err)
-      }
+      results = wdk.simplifySparqlResults(res.body)
       success(results)
     }
   })
@@ -105,9 +101,9 @@ function makeTree(results) {
     if (!items[qid]) {
       item = {
         label:     row.item.label || "",
-        parents:   1*row.parents,
-        instances: 1*row.instances,
-        sites:     1*row.sites,
+        parents:   row.parents,
+        instances: row.instances,
+        sites:     row.sites,
         broader:   []
       }
       if (item.label == row.item.value) item.label = ""
@@ -130,9 +126,11 @@ function makeTree(results) {
   for (var id in items) {
     var item = items[id]
     item.otherparents = item.parents
-    broader[id].forEach(function(node) {
-      if (items[node]) item.otherparents--
-    })
+    if (broader[id]) {
+      broader[id].forEach(function(node) {
+        if (items[node]) item.otherparents--
+      })
+    }
   }
 
   return { items: items, narrower: narrower, broader: broader }
@@ -258,7 +256,7 @@ function printGraph(graph, format) {
 }
 
 program
-  .version('0.2.2')
+  .version('0.2.3')
   .arguments('<id>')
   .option('-l, --language [code]', 'language to get labels in')
   .option('-s, --sparql', 'print SPARQL query and exit')
@@ -274,7 +272,7 @@ program
 	lang   = env.language || 'en' // TOOD: get from POSIX?
     format = env.format || 'tree'
     if (!format.match(/^(tree|csv|json)$/)) {
-      error("unsupported format: %s", format)
+      error(1,"unsupported format: %s", format)
     }
 	sparql = mainSparqlQuery(id, lang)
     if (env.sparql) {
