@@ -76,10 +76,27 @@ function sparqlQuery(sparql) {
 
 // Build graph from root item and SPARQL results
 function buildGraph(root, results) {
-  graph = buildTree(results[0])
+  var graph = buildTree(results[0])
+  
   graph.root = root
+
   if (results[1]) {
-    graph.instances = buildInstances(results[1])
+    var instances = graph.instances = {}
+    var items = graph.items
+    results[1].forEach(function(row) {
+      var id = row.class.value
+      if (!instances[id]) instances[id] = []
+      if (!items[row.instance.value]) {
+        items[row.instance.value] = row.instance
+      }
+      instances[id].push(row.instance.value)
+    })
+
+    for(var id in instances) {
+      instances[id] = instances[id].sort(function(x,y) {
+        return items[x].value.substr(1) - items[y].value.substr(1)
+      })
+    }
   }
   return graph;
 }
@@ -140,25 +157,6 @@ function buildTree(results) {
   return { items: items, narrower: narrower, broader: broader }
 }
 
-// postprocess instances
-function buildInstances(results) {
-  var instances = {}
-
-  results.forEach(function(row) {
-    var id = row.class.value
-    if (!instances[id]) instances[id] = []
-    instances[id].push(row.instance)
-  })
-
-  for(var id in instances) {
-    instances[id] = instances[id].sort(function(x,y) {
-      return x.value.substr(1) - y.value.substr(1)
-    })
-  }
-
-  return instances
-}
-
 // print taxonomy in tree format
 function printTree( graph, id, depth ) {
   var node = graph.items[id];
@@ -185,19 +183,20 @@ function printTree( graph, id, depth ) {
   if (graph.instances) {
     var instances = graph.instances[id] || []
     for(var i=0; i<instances.length; i++) {
-      var label  = instances[i].label == ""
-                 ? "???" : instances[i].label
-      var id     = instances[i].value;
+      var item = graph.items[ instances[i] ]
+
+      var label  = item.label == "" ? "???" : item.label
+      var id     = item.value;
       var prefix = narrower.length ? '|' : ' ';
 
       var row = chalk.dim(depth + prefix)
-      // TODO: show if instance has already been visited!
-      // TODO: show if instance is also a class
-      row += chalk.dim('-')
-      row += chalk.cyan(label)
-      row += chalk.dim(' (') + chalk.green(id) + chalk.dim(')')
-          +  "\n"
+        + chalk.dim( item.visited ? '=' : '-' )
+        + chalk.cyan(label)
+        + chalk.dim(' (') + chalk.green(id) + chalk.dim(')')
+        +  "\n"
       process.stdout.write(row)
+
+      item.visited = true
     }
   }
 
