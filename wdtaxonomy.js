@@ -3,7 +3,8 @@
 var chalk	= require('chalk')
 var wdk 	= require('wikidata-sdk')
 var program = require('commander')
-var request = require('request')
+var request = require('request-promise')
+var Promise = require('bluebird')
 
 // print error and exit
 function error(code) {
@@ -67,21 +68,24 @@ function instancesSparqlQuery(root, language) {
 }`
 }
 
-// perform SPARQL query
-function sparqlRequest(sparql, success) {
+// Ask query.wikidata.org via SPARQL and simplify results
+function sparqlQuery(sparql) {
   var url = wdk.sparqlQuery(sparql)
-
-  request(url, function (err, res) {
-    if (err) {
-      error(2,err)
-    } else {
-      results = wdk.simplifySparqlResults(res.body)
-      success(results)
-    }
-  })
+  return request(url).then(wdk.simplifySparqlResults)
 }
 
-function makeTree(results) {
+// Build graph from root item and SPARQL results
+function buildGraph(root, results) {
+  graph = buildTree(results[0])
+  graph.root = root
+  if (results[1]) {
+    graph.instances = buildInstances(results[1])
+  }
+  return graph;
+}
+
+// build tree structure from results
+function buildTree(results) {
   var items    = {}
   var narrower = {}
   var broader  = {}
@@ -137,7 +141,7 @@ function makeTree(results) {
 }
 
 // postprocess instances
-function makeInstances(results) {
+function buildInstances(results) {
   var instances = {}
 
   results.forEach(function(row) {
@@ -274,27 +278,21 @@ program
     if (!format.match(/^(tree|csv|json)$/)) {
       error(1,"unsupported format: %s", format)
     }
-	sparql = mainSparqlQuery(id, lang)
+
+    var queries = [ mainSparqlQuery(id, lang) ]
+    if (env.instances) queries.push( instancesSparqlQuery(id, lang) )
+
     if (env.sparql) {
-      process.stdout.write(sparql)
-      if (env.instances) {
-        sparql = instancesSparqlQuery(id, lang)
-        process.stdout.write("\n"+sparql)
-      }
+      process.stdout.write(queries.join("\n"))
     } else {
-      sparqlRequest(sparql, function(results) {
-	    graph = makeTree(results)
-        graph.root = id
-        if (env.instances) {
-          sparql = instancesSparqlQuery(id, lang)
-          sparqlRequest(sparql, function(results) {
-            graph.instances = makeInstances(results)
-            printGraph(graph, format)
-          })
-        } else {
+      Promise.all( queries.map(sparqlQuery) )
+        .then(function(results) {
+          graph = buildGraph(id, results)
           printGraph(graph, format)
-        }
-      })
+        })
+        .catch(function(err) {
+          error(2,"SPARQL request failed!")
+        })
     }
   })
   .parse(process.argv)
