@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+// dependencies
 var chalk	= require('chalk')
 var wdk 	= require('wikidata-sdk')
 var program = require('commander')
@@ -299,5 +300,4 @@ program
 if (!program.args.length) {
   program.help()
 }
-
 
