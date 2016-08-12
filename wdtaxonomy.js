@@ -28,25 +28,32 @@ function normalizeId(id) {
 }
 
 // construct basic SPARQL query
-function mainSparqlQuery(root, language) {
+function mainSparqlQuery(root, env) {
+  var language       = env.language
+  var countInstances = !env.noCountInstances && !env.reverse
+  var reachable = env.reverse
+                ? `wd:${root} wdt:P279* ?item`
+                : `?item wdt:P279* wd:${root}`
 
   var sparql = `SELECT ?item ?itemLabel ?broader ?parents ?instances ?sites
 WHERE {
     {
         SELECT ?item (count(distinct ?parent) as ?parents) {
-            ?item wdt:P279* wd:${root}
+            ${reachable}
             OPTIONAL { ?item wdt:P279 ?parent }
         } GROUP BY ?item
     }
-    {
+`
+ if (countInstances) sparql += `    {
         SELECT ?item (count(distinct ?element) as ?instances) {
-            ?item wdt:P279* wd:${root}
+            ${reachable}
             OPTIONAL { ?element wdt:P31 ?item }
         } GROUP BY ?item
     }
-    {
+`
+    sparql += `    {
         SELECT ?item (count(distinct ?site) as ?sites) {
-            ?item wdt:P279* wd:${root}
+            ${reachable}
             OPTIONAL { ?site schema:about ?item }
         } GROUP BY ?item
     }
@@ -75,10 +82,10 @@ function sparqlQuery(sparql) {
   return request(url).then(wdk.simplifySparqlResults)
 }
 
-// Build graph from root item and SPARQL results
+// Build graph data from root item and SPARQL results
 function buildGraph(root, results) {
   var graph = buildTree(results[0])
-  
+
   graph.root = root
 
   if (results[1]) {
@@ -122,6 +129,7 @@ function buildTree(results) {
 
     if (!items[qid]) {
       item = {
+        value:     qid,
         label:     row.item.label || "",
         parents:   row.parents,
         instances: row.instances,
@@ -132,7 +140,7 @@ function buildTree(results) {
       items[qid] = item
     }
   })
-    
+
   for (var id in narrower) {
     // sort child nodes by Wikidata id
     narrower[id] = narrower[id].sort(function(x,y) {
@@ -170,7 +178,8 @@ function printTree( graph, id, depth ) {
   var parents   = node.otherparents
                 ? ' ' + Array(node.otherparents+1).join('↑') : ''
   var narrower  = graph.narrower[id] || []
-  var etc       = node.visited + narrower.length ? " …" : ""
+  var etc       = node.visited + narrower.length ? ' …'
+                : (node.multi > 1 ? '=' : '') // TODO: set multihierarchy
 
   var row = chalk.blue(label)
           + chalk.dim(' (') + chalk.green(id) + chalk.dim(')')
@@ -267,19 +276,26 @@ program
   .option('-f, --format [tree|csv|json]', 'output format')
   .option('-i, --instances', 'include instances (only in tree format)')
   .option('-n, --no-colors', 'disable color output')
+  .option('-r, --reverse', 'get superclasses instead of subclasses')
   .description('extract taxonomies from Wikidata')
   .action(function(id, env) {
     if (!env.colors) {
       chalk = new chalk.constructor({enabled: false});
     }
-    id     = normalizeId(id)
-	lang   = env.language || 'en' // TOOD: get from POSIX?
-    format = env.format || 'tree'
+    id = normalizeId(id)
+
+    env.language = env.language || 'en' // TOOD: get from POSIX?
+    format       = env.format || 'tree'
+
     if (!format.match(/^(tree|csv|json)$/)) {
       error(1,"unsupported format: %s", format)
     }
 
-    var queries = [ mainSparqlQuery(id, lang) ]
+    if (env.instances && env.reverse) {
+      error(1,"option instances and reverse cannot be specified together");
+    }
+
+    var queries = [ mainSparqlQuery(id, env) ]
     if (env.instances) queries.push( instancesSparqlQuery(id, lang) )
 
     if (env.sparql) {
@@ -288,6 +304,11 @@ program
       Promise.all( queries.map(sparqlQuery) )
         .then(function(results) {
           graph = buildGraph(id, results)
+          if (env.reverse) {
+            var tmp = graph.narrower
+            graph.narrower = graph.broader
+            graph.broader = tmp
+          }
           printGraph(graph, format)
         })
         .catch(function(err) {

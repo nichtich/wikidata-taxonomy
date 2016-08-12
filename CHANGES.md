@@ -4,8 +4,8 @@ This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmj
 
 ## Unreleased
 
-* Refactoring
-* Improve tree format
+* New option `--reverse` to show superclasses 
+* Improved tree format
 
 ## 0.2.3 (2017-08-06)
 
@@ -14,12 +14,12 @@ This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmj
 ## 0.2.2 (2016-08-03)
 
 * Improve tree format
-* Add option `--no-colors` to disable colors 
+* New option `--no-colors` to disable colors 
 
 ## 0.2.1 (2016-08-03)
 
-* Add instance with option `--instances`
-* Add color output
+* New option `--instances` to include instances
+* Added color output
 
 ## 0.2.0 (2016-08-01)
 
@@ -28,7 +28,7 @@ This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmj
 
 ## 0.1.1 (2016-07-31)
 
-* Add options `--json` and `--sparql`
+* New options `--json` and `--sparql`
 
 ## 0.0.1 (2016-07-29)
 
