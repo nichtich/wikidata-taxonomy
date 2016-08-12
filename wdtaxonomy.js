@@ -269,7 +269,7 @@ function printGraph(graph, format) {
 }
 
 program
-  .version('0.2.3')
+  .version('0.2.4')
   .arguments('<id>')
   .option('-l, --language [code]', 'language to get labels in')
   .option('-s, --sparql', 'print SPARQL query and exit')
