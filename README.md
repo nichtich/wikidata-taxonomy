@@ -27,29 +27,25 @@ This module provides the command `wdtaxonomy`. By default, a usage help is print
 $ wdtaxonomy
 ```
 
-The first arguments needs to be a Wikidata identifier to be used as root. For
-instance extract a taxonomy of planets ([Q634](https://www.wikidata.org/wiki/Q634)):
+The first arguments needs to be a Wikidata identifier to be used as root. For instance extract a taxonomy of planets ([Q634](https://www.wikidata.org/wiki/Q634)):
 
 ```sh
 $ wdtaxonomy Q634
 ```
 
-The extracted taxonomy is based on statements using the subclass-of property
-([P279](https://www.wikidata.org/wiki/Property:P279)) and additional statistics.
-Option `--sparql` print the SPARQL query that is used.
+The extracted taxonomy is based on statements using the property "subclass of" ([P279](https://www.wikidata.org/wiki/Property:P279)) or "subproperty of" ([P1647](https://www.wikidata.org/wiki/Property:P1647)) and additional statistics.  Option `--sparql` prints the SPARQL queries that are used.
 
 ### Tree format
 
-By default, the taxonomy is printed in "`tree`" format with colored Unicode
-characters:
+By default, the taxonomy is printed in "`tree`" format with colored Unicode characters:
 
 ```sh
 $ wdtaxonomy Q17362350
 ```
 ```
-planet of the Solar System (Q17362350) •2 ^
-├──outer planet (Q30014) •23 ×4 ^
-└──inner planets (Q3504248) •8 ×4 ^
+planet of the Solar System (Q17362350) •2 ↑
+├──outer planet (Q30014) •23 ×4 ↑
+└──inner planets (Q3504248) •8 ×4 ↑
 ```
 
 The output contains item labels, Wikidata identifiers, the number of
@@ -64,13 +60,13 @@ Option "`--instances`" (or "`-i`") explicitly includes instances:
 $ wdtaxonomy -i Q17362350
 ```
 ```
-planet of the Solar System (Q17362350) •2 ^
-├──outer planet (Q30014) •23 ^
+planet of the Solar System (Q17362350) •2 ↑
+├──outer planet (Q30014) •23 ↑
 |   -Saturn (Q193)
 |   -Jupiter (Q319)
 |   -Uranus (Q324)
 |   -Neptune (Q332)
-└──inner planets (Q3504248) •8 ^
+└──inner planets (Q3504248) •8 ↑
     -Earth (Q2)
     -Mars (Q111)
     -Mercury (Q308)
@@ -84,12 +80,12 @@ marked like in the following example:
 $ wdtaxonomy Q634
 ```
 ```
-planet (Q634) •196 ×7 ^
-├──extrasolar planet (Q44559) •81 ×833 ^
+planet (Q634) •196 ×7 ↑
+├──extrasolar planet (Q44559) •81 ×833 ↑
 |  ├──circumbinary planet (Q205901) •14 ×10
 |  ├──super-Earth (Q327757) •32 ×46
 ...
-├──terrestrial planet (Q128207) •67 ×7 
+├──terrestrial planet (Q128207) •67 ×7
 |  ╞══super-Earth (Q327757) •32 ×46  …
 ...
 ```

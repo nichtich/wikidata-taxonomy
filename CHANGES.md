@@ -4,6 +4,8 @@ This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmj
 
 ## Unreleased
 
+## 0.2.5 (2017-08-16)
+
 * Support retrieval of property hierarchies
 
 ## 0.2.4 (2017-08-12)
