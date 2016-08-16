@@ -4,6 +4,10 @@ This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmj
 
 ## Unreleased
 
+* Support retrieval of property hierarchies
+
+## 0.2.4 (2017-08-12)
+
 * New option `--reverse` to show superclasses 
 * Improved tree format
 

@@ -30,34 +30,40 @@ function normalizeId(id) {
 // construct basic SPARQL query
 function mainSparqlQuery(root, env) {
   var language       = env.language
-  var countInstances = !env.noCountInstances && !env.reverse
+  var countInstances = !env.noCountInstances && !env.reverse 
+  var property = env.properties ? 'P1647' : 'P279'
   var reachable = env.reverse
-                ? `wd:${root} wdt:P279* ?item`
-                : `?item wdt:P279* wd:${root}`
+                ? "wd:"+root+" wdt:"+property+"* ?item"
+                : "?item wdt:"+property+"* wd:"+root
 
   var sparql = `SELECT ?item ?itemLabel ?broader ?parents ?instances ?sites
 WHERE {
     {
         SELECT ?item (count(distinct ?parent) as ?parents) {
             ${reachable}
-            OPTIONAL { ?item wdt:P279 ?parent }
+            OPTIONAL { ?item wdt:${property} ?parent }
         } GROUP BY ?item
     }
 `
- if (countInstances) sparql += `    {
+    if (!env.property) { // TODO: get usage of property
+      if (countInstances) {
+        sparql += `    {
         SELECT ?item (count(distinct ?element) as ?instances) {
             ${reachable}
             OPTIONAL { ?element wdt:P31 ?item }
         } GROUP BY ?item
     }
-`
-    sparql += `    {
+`     }
+      sparql += `    {
         SELECT ?item (count(distinct ?site) as ?sites) {
             ${reachable}
             OPTIONAL { ?site schema:about ?item }
         } GROUP BY ?item
     }
-    OPTIONAL { ?item wdt:P279 ?broader }
+`
+    }
+
+    sparql += `    OPTIONAL { ?item wdt:${property} ?broader }
     SERVICE wikibase:label {
         bd:serviceParam wikibase:language "${language}" .
     }
@@ -283,6 +289,9 @@ program
       chalk = new chalk.constructor({enabled: false});
     }
     id = normalizeId(id)
+    if (id.substr(0,1) == 'P') {
+      env.properties = true
+    }
 
     env.language = env.language || 'en' // TOOD: get from POSIX?
     format       = env.format || 'tree'
@@ -296,7 +305,9 @@ program
     }
 
     var queries = [ mainSparqlQuery(id, env) ]
-    if (env.instances) queries.push( instancesSparqlQuery(id, lang) )
+    if (env.instances && !env.properties) {
+      queries.push( instancesSparqlQuery(id, env.language) )
+    }
 
     if (env.sparql) {
       process.stdout.write(queries.join("\n"))
