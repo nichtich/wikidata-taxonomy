@@ -4,6 +4,8 @@ This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmj
 
 ## Unreleased
 
+* New option `--output` for output file
+
 ## 0.2.5 (2017-08-16)
 
 * Support retrieval of property hierarchies

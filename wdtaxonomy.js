@@ -173,9 +173,9 @@ function buildTree(results) {
 }
 
 // print taxonomy in tree format
-function printTree( graph, id, depth ) {
+function serializeTree( graph, id, depth ) {
   var node = graph.items[id];
-  if (!node) return
+  if (!node) return ''
 
   var label     = node.label == "" ? "???" : node.label
   var sites     = node.sites ? ' •' + node.sites : ''
@@ -187,13 +187,13 @@ function printTree( graph, id, depth ) {
   var etc       = node.visited + narrower.length ? ' …'
                 : (node.multi > 1 ? '=' : '') // TODO: set multihierarchy
 
-  var row = chalk.blue(label)
-          + chalk.dim(' (') + chalk.green(id) + chalk.dim(')')
-          + chalk.yellow(sites) + chalk.cyan(instances)
-          + chalk.red(parents + etc)
+  var string = chalk.blue(label)
+             + chalk.dim(' (') + chalk.green(id) + chalk.dim(')')
+             + chalk.yellow(sites) + chalk.cyan(instances)
+             + chalk.red(parents + etc)
+             + "\n"
 
-  process.stdout.write(row+"\n")
-  if (node.visited) return;
+  if (node.visited) return string;
   node.visited = true;
 
   if (graph.instances) {
@@ -205,12 +205,11 @@ function printTree( graph, id, depth ) {
       var id     = item.value;
       var prefix = narrower.length ? '|' : ' ';
 
-      var row = chalk.dim(depth + prefix)
-        + chalk.dim( item.visited ? '=' : '-' )
-        + chalk.cyan(label)
-        + chalk.dim(' (') + chalk.green(id) + chalk.dim(')')
-        +  "\n"
-      process.stdout.write(row)
+      string += chalk.dim(depth + prefix)
+      string += chalk.dim( item.visited ? '=' : '-' )
+      string += chalk.cyan(label)
+      string += chalk.dim(' (') + chalk.green(id) + chalk.dim(')')
+      string +=  "\n"
 
       item.visited = true
     }
@@ -224,20 +223,23 @@ function printTree( graph, id, depth ) {
     } else {
       prefix = last ? '└──' : '├──'
     }
-    process.stdout.write(chalk.dim(depth + prefix))
-    printTree(graph, cur, depth + (last ? '   ' : '│  '));
+    string += chalk.dim(depth + prefix)
+    string += serializeTree(graph, cur, depth + (last ? '   ' : '│  '));
   }
+
+  return string
 }
 
 // print taxonomy in CSV format
-function printCSV( graph, id, depth ) {
+function serializeCSV( graph, id, depth ) {
   var node = graph.items[id];
-  if (!node) return
+  var csv = ''
+  if (!node) return csv
 
   var label = node.label.replace(',',' ') // for CSV
 
   if (depth==0) {
-    process.stdout.write("level,id,label,sites,instances,parents\n")
+    csv += "level,id,label,sites,instances,parents\n"
   }
 
   var row = [
@@ -248,29 +250,31 @@ function printCSV( graph, id, depth ) {
     node.instances,
     Array(node.otherparents+1).join('^')
   ];
-  process.stdout.write(row.join(',')+"\n")
+  csv += row.join(',') + "\n"
 
-  if (node.visited) return;
-  node.visited = true;
+  if (!node.visited) {
+    node.visited = true;
+    var narrower = graph.narrower[id] || []
+    narrower.forEach(function(child) {
+      csv += serializeCSV(graph, child, depth+1);
+    });
+  }
 
-  var narrower = graph.narrower[id] || []
-  narrower.forEach(function(child) {
-    printCSV(graph, child, depth+1);
-  });
+  return csv
 }
 
-function printJSON(graph) {
+function serializeJSON(graph) {
   // TODO: use canonical-json
-  process.stdout.write(JSON.stringify(graph, null, 4) + '\n')
+  return JSON.stringify(graph, null, 4) + '\n'
 }
 
-function printGraph(graph, format) {
+function serializeGraph(graph, format) {
   if (format == 'json') {
-    printJSON(graph)
+    return serializeJSON(graph)
   } else if (format == 'csv') {
-    printCSV(graph, graph.root, 0)
+    return serializeCSV(graph, graph.root, 0)
   } else {
-    printTree(graph, graph.root, "")
+    return serializeTree(graph, graph.root, "")
   }
 }
 
@@ -283,6 +287,7 @@ program
   .option('-i, --instances', 'include instances (only in tree format)')
   .option('-n, --no-colors', 'disable color output')
   .option('-r, --reverse', 'get superclasses instead of subclasses')
+  .option('-o, --output [file]', 'write result to a file')
   .description('extract taxonomies from Wikidata')
   .action(function(id, env) {
     if (!env.colors) {
@@ -291,6 +296,16 @@ program
     id = normalizeId(id)
     if (id.substr(0,1) == 'P') {
       env.properties = true
+    }
+
+    var out = process.stdout
+    if (env.output) {
+      out = require('fs').createWriteStream(env.output)
+      out.on('error', function(err) { error(2,err) })
+      var ext = env.output.split('.').pop()
+      if (!env.format && (ext == 'csv' || ext == 'json')) {
+        env.format = ext
+      }
     }
 
     env.language = env.language || 'en' // TOOD: get from POSIX?
@@ -310,7 +325,7 @@ program
     }
 
     if (env.sparql) {
-      process.stdout.write(queries.join("\n"))
+      out.write(queries.join("\n"))
     } else {
       Promise.all( queries.map(sparqlQuery) )
         .then(function(results) {
@@ -320,7 +335,7 @@ program
             graph.narrower = graph.broader
             graph.broader = tmp
           }
-          printGraph(graph, format)
+          out.write(serializeGraph(graph, format))
         })
         .catch(function(err) {
           error(2,"SPARQL request failed!")
