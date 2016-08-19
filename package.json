@@ -4,7 +4,7 @@
   "description": "command line tool to extract taxonomies from Wikidata",
   "author": "Jakob Voß",
   "license": "MIT",
-  "main": "index.js",
+  "main": "lib/wikidata-taxonomy.js",
   "bin": {
     "wdtaxonomy": "./wdtaxonomy.js"
   },
