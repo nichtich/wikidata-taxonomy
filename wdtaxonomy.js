@@ -33,7 +33,9 @@ program
     if (id === undefined) {
       error(1,"invalid id: %s", wid)
     }
+    var type = 'item';
     if (id.substr(0,1) == 'P') {
+      type = 'property'
       env.properties = true
     }
 
@@ -69,13 +71,28 @@ program
       out(env.output).write(queries.join("\n"))
     } else {
       Promise.all( queries.map(wdt.query) )
-        .catch((err) => {
-          error(2,"SPARQL request failed!")
+        .catch( e => { error(2,"SPARQL request failed!") } )
+        // TODO: move to library
+        .then( results => {
+          if (results[0].length == 1 && (!results[1] || !results[1].length)) {
+            var item = results[0][0]
+            if (item.item.label == id && !item.parents && !item.instances && !item.sites) {
+              // check whether lonely item/probably actually exists
+              return wdt.query('SELECT * WHERE { wd:'+id+' ?p ?v } LIMIT 1')
+                .catch( e => { error(2,"SPARQL request failed!") } )
+                .then((r) => {
+                  return r.length ? wdt.build(id, results, env.reverse) : null
+                })
+            }
+          }
+          return wdt.build(id, results, env.reverse)
         })
-        // TODO: check if only one result and test for existence/type
-        .then((results) => {
-          graph = wdt.build(id, results, env.reverse)
-          out(env.output).write(wdt.serialize(graph, format))
+        .then( taxonomy => {
+          if (taxonomy) {
+            out(env.output).write(wdt.serialize(taxonomy, format))
+          } else {
+            error(2,type+" not found: "+id)
+          }
         })
     }
   })
