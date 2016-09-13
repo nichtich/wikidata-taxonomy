@@ -139,8 +139,13 @@ subclass of "terrestrial planet" where it is marked by "`==`" instead of
 
 ### JSON format
 
-Option `--format json` enables JSON output instead of CSV. The JSON object has
-four fields "`items`", "`narrower`", "`broader`", and "`root`".
+Option `--format json` serializes the taxonomy as JSON object with the following fields:
+
+* root: Wikidata identifier of the root item/property
+* items: object with Wikidata items/properties, indexed by their identifier 
+* narrower
+* broader
+* instances (if option `instances` is enabled)
 
 ## See Also
 
