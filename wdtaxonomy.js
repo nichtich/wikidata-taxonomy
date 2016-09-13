@@ -29,6 +29,7 @@ program
     if (!env.colors) {
       chalk = new chalk.constructor({enabled: false});
     }
+    wid = wid.replace(/^.*\W([QP][0-9]+)$/i,'$1');
     var id = wdt.normalizeId(wid)
     if (id === undefined) {
       error(1,"invalid id: %s", wid)
