@@ -17,13 +17,14 @@ function error(code) {
 program
   .version(require('./package.json').version)
   .arguments('<id>')
-  .option('-l, --language [code]', 'language to get labels in')
+  .option('-l, --language <code>', 'language to get labels in')
   .option('-s, --sparql', 'print SPARQL query and exit')
-  .option('-f, --format [tree|csv|json]', 'output format')
+  .option('-f, --format <tree|csv|json>', 'output format')
   .option('-i, --instances', 'include instances (only in tree format)')
+  .option('-c, --children', 'get direct subclasses only')
   .option('-n, --no-colors', 'disable color output')
   .option('-r, --reverse', 'get superclasses instead of subclasses')
-  .option('-o, --output [file]', 'write result to a file')
+  .option('-o, --output <file>', 'write result to a file')
   .description('extract taxonomies from Wikidata')
   .action(function(wid, env) {
     if (!env.colors) {
