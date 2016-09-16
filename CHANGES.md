@@ -5,6 +5,7 @@ This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmj
 ## Unreleased
 
 * New option `--children` to only get direct subclasses
+* More more liberal identifier parsing
 
 ## 0.2.8 (2017-09-13)
 

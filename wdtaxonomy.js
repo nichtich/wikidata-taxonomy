@@ -30,7 +30,7 @@ program
     if (!env.colors) {
       chalk = new chalk.constructor({enabled: false});
     }
-    wid = wid.replace(/^.*\W([QP][0-9]+)$/i,'$1');
+    wid = wid.replace(/^.*[^0-9A-Z]([QP][0-9]+)([^0-9].*)?$/i,'$1');
     var id = wdt.normalizeId(wid)
     if (id === undefined) {
       error(1,"invalid id: %s", wid)
@@ -83,11 +83,11 @@ program
               return wdt.query('SELECT * WHERE { wd:'+id+' ?p ?v } LIMIT 1')
                 .catch( e => { error(2,"SPARQL request failed!") } )
                 .then((r) => {
-                  return r.length ? wdt.build(id, results, env.reverse) : null
+                  return r.length ? wdt.build(id, results, env) : null
                 })
             }
           }
-          return wdt.build(id, results, env.reverse)
+          return wdt.build(id, results, env)
         })
         .then( taxonomy => {
           if (taxonomy) {
