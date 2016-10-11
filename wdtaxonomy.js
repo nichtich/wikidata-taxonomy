@@ -3,7 +3,6 @@
 // dependencies
 var chalk	= require('chalk')
 var program = require('commander')
-var Promise = require('bluebird')
 var wdt = require('./lib/wikidata-taxonomy.js')
 
 // print error and exit
@@ -30,6 +29,7 @@ program
     if (!env.colors) {
       chalk = new chalk.constructor({enabled: false});
     }
+
     wid = wid.replace(/^.*[^0-9A-Z]([QP][0-9]+)([^0-9].*)?$/i,'$1');
     var id = wdt.normalizeId(wid)
     if (id === undefined) {
@@ -67,34 +67,16 @@ program
       return stream
     }
 
-    var queries = wdt.sparql.queries(id, env)
-       
     if (env.sparql) {
+      var queries = wdt.sparql.queries(id,env)
       out(env.output).write(queries.join("\n")+"\n")
     } else {
-      Promise.all( queries.map(wdt.query) )
-        .catch( e => { error(2,"SPARQL request failed!") } )
-        // TODO: move to library
-        .then( results => {
-          if (results[0].length == 1 && (!results[1] || !results[1].length)) {
-            var item = results[0][0]
-            if (item.item.label == id && !item.parents && !item.instances && !item.sites) {
-              // check whether lonely item/probably actually exists
-              return wdt.query('SELECT * WHERE { wd:'+id+' ?p ?v } LIMIT 1')
-                .catch( e => { error(2,"SPARQL request failed!") } )
-                .then((r) => {
-                  return r.length ? wdt.build(id, results, env) : null
-                })
-            }
-          }
-          return wdt.build(id, results, env)
-        })
+      wdt.taxonomy(id,env)
         .then( taxonomy => {
-          if (taxonomy) {
-            out(env.output).write(wdt.serialize(taxonomy, format))
-          } else {
-            error(2,type+" not found: "+id)
-          }
+          out(env.output).write(wdt.serialize(taxonomy, format))
+        })
+        .catch( e => {
+          error(2, e.message)
         })
     }
   })
