@@ -70,7 +70,7 @@ program
     var queries = wdt.sparql.queries(id, env)
        
     if (env.sparql) {
-      out(env.output).write(queries.join("\n"))
+      out(env.output).write(queries.join("\n")+"\n")
     } else {
       Promise.all( queries.map(wdt.query) )
         .catch( e => { error(2,"SPARQL request failed!") } )
