@@ -4,6 +4,8 @@ This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmj
 
 ## Unreleased
 
+* Add option `--brief` to omit number of sites and instance
+
 ## 0.2.10 (2017-02-27)
 
 * Change label color to white (#7)

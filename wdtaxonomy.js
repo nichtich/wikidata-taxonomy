@@ -20,6 +20,7 @@ program
   .option('-s, --sparql', 'print SPARQL query and exit')
   .option('-f, --format <tree|csv|json>', 'output format')
   .option('-i, --instances', 'include instances (only in tree format)')
+  .option('-b, --brief', 'don\'t count instance and sites')
   .option('-c, --children', 'get direct subclasses only')
   .option('-n, --no-colors', 'disable color output')
   .option('-p, --post', 'use HTTP POST to disable caching')
