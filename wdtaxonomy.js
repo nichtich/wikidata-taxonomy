@@ -22,6 +22,7 @@ program
   .option('-i, --instances', 'include instances (only in tree format)')
   .option('-c, --children', 'get direct subclasses only')
   .option('-n, --no-colors', 'disable color output')
+  .option('-p, --post', 'use HTTP POST to disable caching')
   .option('-r, --reverse', 'get superclasses instead of subclasses')
   .option('-o, --output <file>', 'write result to a file')
   .description('extract taxonomies from Wikidata')

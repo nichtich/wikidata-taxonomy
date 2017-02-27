@@ -3,6 +3,8 @@
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
 ## Unreleased
+* Change label color to white (#7)
+* Add option `--post` to disable caching
 
 ## 0.2.9 (2017-09-16)
 
