@@ -2,8 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
-## Unreleased
+## 0.3.0 (2017-03-02)
 
+* Add JSKOS output format (`ndjson`)
+* Add option `--total` to count total/transitive number of instances
 * Add option `--brief` to omit number of sites and instance
 * Add option `--verbose` to enable verbose error message
 

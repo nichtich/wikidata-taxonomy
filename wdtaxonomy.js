@@ -16,16 +16,17 @@ function error(code) {
 program
   .version(require('./package.json').version)
   .arguments('<id>')
-  .option('-l, --language <code>', 'language to get labels in')
-  .option('-s, --sparql', 'print SPARQL query and exit')
-  .option('-f, --format <tree|csv|json>', 'output format')
-  .option('-i, --instances', 'include instances (only in tree format)')
   .option('-b, --brief', 'don\'t count instance and sites')
   .option('-c, --children', 'get direct subclasses only')
-  .option('-p, --post', 'use HTTP POST to disable caching')
-  .option('-r, --reverse', 'get superclasses instead of subclasses')
-  .option('-o, --output <file>', 'write result to a file')
+  .option('-f, --format <tree|csv|json|ndjson>', 'output format')
+  .option('-i, --instances', 'include instances (tree format)')
+  .option('-l, --language <code>', 'language to get labels in')
   .option('-n, --no-colors', 'disable color output')
+  .option('-o, --output <file>', 'write result to a file')
+  .option('-p, --post', 'use HTTP POST to disable caching')
+  .option('-r, --reverse', 'get superclasses instead')
+  .option('-s, --sparql', 'print SPARQL query and exit')
+  .option('-t, --total', 'count total number of instances')
   .option('-v, --verbose', 'show verbose error messages')
   .description('extract taxonomies from Wikidata')
   .action(function(wid, env) {
@@ -47,7 +48,7 @@ program
     var out = process.stdout
     if (env.output) {
       var ext = env.output.split('.').pop()
-      if (!env.format && ['csv','json'].indexOf(ext) >= 0) {
+      if (!env.format && ['csv','json','ndjson'].indexOf(ext) >= 0) {
         env.format = ext
       }
     }
@@ -55,7 +56,7 @@ program
     env.language = env.language || 'en' // TOOD: get from POSIX?
     format       = env.format || 'tree'
 
-    if (!format.match(/^(tree|csv|json)$/)) {
+    if (!format.match(/^(tree|csv|json|ndjson)$/)) {
       error(1,"unsupported format: %s", format)
     }
 
