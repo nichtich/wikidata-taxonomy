@@ -5,6 +5,7 @@ This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmj
 ## Unreleased
 
 * Add option `--brief` to omit number of sites and instance
+* Add option `--verbose` to enable verbose error message
 
 ## 0.2.10 (2017-02-27)
 

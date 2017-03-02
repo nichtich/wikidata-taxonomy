@@ -22,10 +22,11 @@ program
   .option('-i, --instances', 'include instances (only in tree format)')
   .option('-b, --brief', 'don\'t count instance and sites')
   .option('-c, --children', 'get direct subclasses only')
-  .option('-n, --no-colors', 'disable color output')
   .option('-p, --post', 'use HTTP POST to disable caching')
   .option('-r, --reverse', 'get superclasses instead of subclasses')
   .option('-o, --output <file>', 'write result to a file')
+  .option('-n, --no-colors', 'disable color output')
+  .option('-v, --verbose', 'show verbose error messages')
   .description('extract taxonomies from Wikidata')
   .action(function(wid, env) {
     if (!env.colors) {
@@ -46,7 +47,7 @@ program
     var out = process.stdout
     if (env.output) {
       var ext = env.output.split('.').pop()
-      if (!env.format && (ext == 'csv' || ext == 'json')) {
+      if (!env.format && ['csv','json'].indexOf(ext) >= 0) {
         env.format = ext
       }
     }
@@ -78,7 +79,7 @@ program
           out(env.output).write(wdt.serialize(taxonomy, format))
         })
         .catch( e => {
-          error(2, e.message)
+          error(2, env.verbose && e.stack ? e.stack : e.message);
         })
     }
   })
