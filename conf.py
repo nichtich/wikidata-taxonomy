@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 # Sphinx document generator configuration file for node projects
+# At Read The Docs you may need to refer to this file in Advanced Settings
 
 from __future__ import unicode_literals
 from recommonmark.parser import CommonMarkParser
 import json
+import sys
+import os
 import datetime
 import sphinx_rtd_theme
 

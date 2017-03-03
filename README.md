@@ -1,8 +1,5 @@
 # Wikidata-Taxonomy
 
-[![build status](https://api.travis-ci.org/nichtich/wikidata-taxonomy.svg?branch=master)](http://travis-ci.org/nichtich/wikidata-taxonomy)
-[![npm version](http://img.shields.io/npm/v/wikidata-taxonomy.svg?style=flat)](https://www.npmjs.org/package/wikidata-taxonomy)
-
 Command-line tool to extract taxonomies from [wikidata](https://wikidata.org).
 
 ![](https://github.com/nichtich/wikidata-taxonomy/raw/master/img/wdtaxonomy-example.png)
@@ -152,6 +149,18 @@ Option `--format json` serializes the taxonomy as JSON object with the following
 Release notes are listed in file [CHANGES.md](https://github.com/nichtich/wikidata-taxonomy/blob/master/CHANGES.md#changelog) in the source code repository.
 
 ## See Also
+
+[![build status](https://api.travis-ci.org/nichtich/wikidata-taxonomy.svg?branch=master)](http://travis-ci.org/nichtich/wikidata-taxonomy)
+[![npm version](http://img.shields.io/npm/v/wikidata-taxonomy.svg?style=flat)](https://www.npmjs.org/package/wikidata-taxonomy)
+[![Documentation Status](https://readthedocs.org/projects/wdtaxonomy/badge/?version=latest)](http://wdtaxonomy.readthedocs.io/en/latest/?badge=latest)
+
+This document
+
+* [at GitHub](https://github.com/nichtich/wikidata-taxonomy/blob/master/README.md)
+* [at npmjs](https://www.npmjs.com/package/wikidata-taxonomy)
+* [at Read the Docs](https://wdtaxonomy.readthedocs.io/en/latest/)
+
+Related tools
 
 * [wikidata-sdk](https://npmjs.com/package/wikidata-sdk) is used by this module
 * [wikidata-cli](https://npmjs.com/package/wikidata-cli) provide more generic
