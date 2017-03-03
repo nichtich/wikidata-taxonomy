@@ -5,7 +5,7 @@
 
 Command-line tool to extract taxonomies from [wikidata](https://wikidata.org).
 
-![](https://github.com/nichtich/wikidata-taxonomy/raw/master/wdtaxonomy-example.png)
+![](https://github.com/nichtich/wikidata-taxonomy/raw/master/img/wdtaxonomy-example.png)
 
 ## Dependencies
 
@@ -146,6 +146,10 @@ Option `--format json` serializes the taxonomy as JSON object with the following
 * narrower
 * broader
 * instances (if option `instances` is enabled)
+
+## Release notes
+
+Release notes are listed in file [CHANGES.md](https://github.com/nichtich/wikidata-taxonomy/blob/master/CHANGES.md#changelog) in the source code repository.
 
 ## See Also
 

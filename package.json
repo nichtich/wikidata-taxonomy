@@ -40,5 +40,11 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.0.0"
+  },
+  "conf.py": {
+    "project": "wdtaxonomy",
+    "latex_elements": {
+      "papersize": "a4paper"
+    }
   }
 }
