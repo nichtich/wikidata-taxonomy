@@ -2,6 +2,12 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+## 0.3.1 (2017-03-04)
+
+* Fix inclusion of number of sites
+* Add option `--property` to query other kinds of taxonomies
+  such as partitive, biological etc.
+
 ## 0.3.0 (2017-03-02)
 
 * Add JSKOS output format (`ndjson`)
