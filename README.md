@@ -4,11 +4,9 @@ Command-line tool to extract taxonomies from [wikidata](https://wikidata.org).
 
 ![](https://github.com/nichtich/wikidata-taxonomy/raw/master/img/wdtaxonomy-example.png)
 
-## Dependencies
-
-* [NodeJs](https://nodejs.org) (at least version 4)
-
 ## Installation
+
+wikidata-taxonomy requires at least [NodeJs](https://nodejs.org) version 4.
 
 Install globally to make command `wdtaxonomy` accessible from your shell `$PATH`:
 
@@ -18,7 +16,7 @@ $ npm install -g wikidata-taxonomy
 
 ## Usage
 
-This module provides the command `wdtaxonomy`. By default, a usage help is printed: 
+This module provides the command `wdtaxonomy`. By default, a usage help is printed:
 
 ```sh
 $ wdtaxonomy
@@ -31,6 +29,13 @@ $ wdtaxonomy Q634
 ```
 
 The extracted taxonomy is based on statements using the property "subclass of" ([P279](https://www.wikidata.org/wiki/Property:P279)) or "subproperty of" ([P1647](https://www.wikidata.org/wiki/Property:P1647)) and additional statistics.  Option `--sparql` prints the SPARQL queries that are used.
+
+Taxonomy extraction and output can be controlled by several options. For
+instance this command lists a biological taxonomy of mammals:
+
+    $ wdtaxonomy.js Q7377 --property P171 --brief
+
+## Output formats
 
 ### Tree format
 
@@ -49,7 +54,7 @@ The output contains item labels, Wikidata identifiers, the number of
 Wikimedia sites connected to each item (indicated by bullet character "`•`"),
 the number of instances ([property P31](https://www.wikidata.org/wiki/P31),
 indicated by a multiplication sign "`×`"), and an upwards arrow ("`↑`") as
-indicator for additional superclass not included in the tree.  
+indicator for additional superclass not included in the tree.
 
 Option "`--instances`" (or "`-i`") explicitly includes instances:
 
@@ -92,7 +97,7 @@ planet (Q634) •196 ×7 ↑
 The CSV format ("`--format csv`") is optimized for comparing differences in
 time.  Each output row consists of five fields:
 
-* **level** in the hierarchy indicated by zero or more "`-`" (default) or "`=`" 
+* **level** in the hierarchy indicated by zero or more "`-`" (default) or "`=`"
   characters (multihierarchy).
 
 * **id** of the item. Items on the same level are sorted by their id.
@@ -139,10 +144,55 @@ subclass of "terrestrial planet" where it is marked by "`==`" instead of
 Option `--format json` serializes the taxonomy as JSON object with the following fields:
 
 * root: Wikidata identifier of the root item/property
-* items: object with Wikidata items/properties, indexed by their identifier 
+* items: object with Wikidata items/properties, indexed by their identifier
 * narrower
 * broader
 * instances (if option `instances` is enabled)
+
+## Specialized taxonomies
+
+The hierarchy properties [P279](http://www.wikidata.org/entity/P279) ("subclass
+of") and [P31](http://www.wikidata.org/entity/P31) ("instance of") to build
+taxonomies from can be changed with option `property` (`-P`).
+
+Members of (P463) the European Union (Q458):
+
+    $ wdtaxonomy Q458 -P P463
+
+Members of (P463) the European Union (Q458) and number of its citizens in
+Wikidata (P27):
+
+    $ wdtaxonomy Q458 -P 463/27
+
+As Wikidata is no strict ontology, subproperties are not factored in. For
+instance this query does not include members of the European Union although
+P463 is a subproperty of P361.
+
+Parts of (P361) the European Union (Q458):
+
+    $ wdtaxonomy Q458 -P P361
+
+A taxonomy of subproperties can be queried like taxonomies of items. The
+hierarchy property is set to P1647 ("subproperty of") by default:
+
+    $ wdtaxonomy P361
+    $ wdtaxonomy P361 -P P1647  # equivalent
+
+Subproperties of "part of" (P361) and which of them have an inverse property
+(P1696):
+
+    $ wdtaxonomy P361 -P P1647/P1696
+
+Inverse properties are neither factored in so queries like these do not
+necesarrily return the same results:
+
+What hand (Q33767) is part of (P361):
+
+    $ wdtaxonomy Q33767 -P 361 -r
+
+What parts the hand (Q33767) has (P527):
+
+    $ wdtaxonomy Q33767 -P 527
 
 ## Release notes
 
