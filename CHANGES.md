@@ -2,6 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+## 0.3.2 (2017-03-06)
+
+* Fix option `--total`
+
 ## 0.3.1 (2017-03-04)
 
 * Fix inclusion of number of sites
