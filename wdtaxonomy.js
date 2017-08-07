@@ -28,6 +28,9 @@ program
   .option('-r, --reverse', 'get superclasses instead')
   .option('-s, --sparql', 'print SPARQL query and exit')
   .option('-t, --total', 'count total number of instances')
+  .option('-e, --endpoint <url>', 'Sparql endpoint to query (defaults to query.wikidata.org)')
+  .option('-eu, --endpoint-user <url>', 'User to the sparql endpoint')
+  .option('-ep, --endpoint-password <url>', 'Password to the sparql endpoint')
   .option('-v, --verbose', 'show verbose error messages')
   .description('extract taxonomies from Wikidata')
   .action(function(wid, env) {
@@ -50,6 +53,7 @@ program
     }
 
     env.language = env.language || 'en' // TOOD: get from POSIX?
+    env.endpoint = env.endpoint || 'https://query.wikidata.org/sparql'
     format       = env.format || 'tree'
 
     if (!format.match(/^(tree|csv|json|ndjson)$/)) {
