@@ -19,6 +19,7 @@ program
   .option('-b, --brief', 'don\'t count instance and sites')
   .option('-c, --children', 'get direct subclasses only')
   .option('-d, --descr', 'include item descriptions')
+  .option('-e, --endpoint <url>', 'SPARQL endpoint to query')
   .option('-f, --format <tree|csv|json|ndjson>', 'output format')
   .option('-i, --instances', 'include instances (tree format)')
   .option('-l, --language <code>', 'language to get labels in')
@@ -29,7 +30,9 @@ program
   .option('-r, --reverse', 'get superclasses instead')
   .option('-s, --sparql', 'print SPARQL query and exit')
   .option('-t, --total', 'count total number of instances')
+  .option('-u, --user <name>', 'user to the SPARQL endpoint')
   .option('-v, --verbose', 'show verbose error messages')
+  .option('-w, --password <string>', 'password to the SPARQL endpoint')
   .description('extract taxonomies from Wikidata')
   .action(function(wid, env) {
     if (!env.colors) {
@@ -52,6 +55,7 @@ program
 
     env.description = env.descr
     env.language = env.language || 'en' // TOOD: get from POSIX?
+    env.endpoint = env.endpoint || 'https://query.wikidata.org/sparql'
     format       = env.format || 'tree'
 
     if (!format.match(/^(tree|csv|json|ndjson)$/)) {
