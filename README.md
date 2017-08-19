@@ -1,6 +1,6 @@
 # Wikidata-Taxonomy
 
-Command-line tool to extract taxonomies from [wikidata](https://wikidata.org).
+Command-line tool to extract taxonomies from [Wikidata](https://wikidata.org).
 
 ![](https://github.com/nichtich/wikidata-taxonomy/raw/master/img/wdtaxonomy-example.png)
 
@@ -20,9 +20,30 @@ This module provides the command `wdtaxonomy`. By default, a usage help is print
 
 ```sh
 $ wdtaxonomy
+
+  Usage: wdtaxonomy [options] <id>
+
+  extract taxonomies from Wikidata
+
+  Options:
+
+    -h, --help                           output usage information
+    -V, --version                        output the version number
+    -b, --brief                          don't count instance and sites
+    -c, --children                       get direct subclasses only
+    -f, --format <tree|csv|json|ndjson>  output format
+    -i, --instances                      include instances (tree format)
+    -l, --language <code>                language to get labels in
+    -n, --no-colors                      disable color output
+    -o, --output <file>                  write result to a file
+    -p, --post                           use HTTP POST to disable caching
+    -r, --reverse                        get superclasses instead
+    -s, --sparql                         print SPARQL query and exit
+    -t, --total                          count total number of instances
+    -v, --verbose                        show verbose error messages
 ```
 
-The first arguments needs to be a Wikidata identifier to be used as root. For instance extract a taxonomy of planets ([Q634](https://www.wikidata.org/wiki/Q634)):
+The first arguments needs to be a Wikidata identifier to be used as root of the taxonomy. For instance extract a taxonomy of planets ([Q634](https://www.wikidata.org/wiki/Q634)):
 
 ```sh
 $ wdtaxonomy Q634
@@ -30,10 +51,64 @@ $ wdtaxonomy Q634
 
 The extracted taxonomy is based on statements using the property "subclass of" ([P279](https://www.wikidata.org/wiki/Property:P279)) or "subproperty of" ([P1647](https://www.wikidata.org/wiki/Property:P1647)) and additional statistics.  Option `--sparql` prints the SPARQL queries that are used.
 
-Taxonomy extraction and output can be controlled by several options. For
+Taxonomy extraction and output can be controlled by several [options](#options). For
 instance this command lists a biological taxonomy of mammals:
 
     $ wdtaxonomy.js Q7377 --property P171 --brief
+
+## Options
+
+### Query options
+
+#### brief
+
+Don't count instance and sites
+
+#### children
+
+Get direct subclasses only
+
+#### instances
+
+include instances (tree format)
+
+#### language
+
+language to get labels in
+
+#### reverse
+
+get superclasses instead
+
+#### total
+
+count total number of instances
+
+#### post
+
+use HTTP POST to disable caching
+
+#### sparql
+
+Don't actually perform a query but print SPARQL query and exit
+
+### Output options
+
+#### format
+
+Output format
+
+#### colors
+
+disable color output
+
+#### output
+
+write result to a file
+
+#### verbose
+
+show verbose error messages
 
 ## Output formats
 
@@ -155,12 +230,12 @@ The hierarchy properties [P279](http://www.wikidata.org/entity/P279) ("subclass
 of") and [P31](http://www.wikidata.org/entity/P31) ("instance of") to build
 taxonomies from can be changed with option `property` (`-P`).
 
-Members of (P463) the European Union (Q458):
+*Members of (P463) the European Union (Q458):*
 
     $ wdtaxonomy Q458 -P P463
 
-Members of (P463) the European Union (Q458) and number of its citizens in
-Wikidata (P27):
+*Members of (P463) the European Union (Q458) and number of its citizens in
+Wikidata (P27):*
 
     $ wdtaxonomy Q458 -P 463/27
 
@@ -168,7 +243,7 @@ As Wikidata is no strict ontology, subproperties are not factored in. For
 instance this query does not include members of the European Union although
 P463 is a subproperty of P361.
 
-Parts of (P361) the European Union (Q458):
+*Parts of (P361) the European Union (Q458):*
 
     $ wdtaxonomy Q458 -P P361
 
@@ -178,19 +253,19 @@ hierarchy property is set to P1647 ("subproperty of") by default:
     $ wdtaxonomy P361
     $ wdtaxonomy P361 -P P1647  # equivalent
 
-Subproperties of "part of" (P361) and which of them have an inverse property
-(P1696):
+*Subproperties of "part of" (P361) and which of them have an inverse property
+(P1696):*
 
     $ wdtaxonomy P361 -P P1647/P1696
 
 Inverse properties are neither factored in so queries like these do not
 necesarrily return the same results:
 
-What hand (Q33767) is part of (P361):
+*What hand (Q33767) is part of (P361):*
 
     $ wdtaxonomy Q33767 -P 361 -r
 
-What parts the hand (Q33767) has (P527):
+*What parts the hand (Q33767) has (P527):*
 
     $ wdtaxonomy Q33767 -P 527
 
