@@ -18,6 +18,7 @@ program
   .arguments('<id>')
   .option('-b, --brief', 'don\'t count instance and sites')
   .option('-c, --children', 'get direct subclasses only')
+  .option('-d, --descr', 'include item descriptions')
   .option('-f, --format <tree|csv|json|ndjson>', 'output format')
   .option('-i, --instances', 'include instances (tree format)')
   .option('-l, --language <code>', 'language to get labels in')
@@ -49,6 +50,7 @@ program
       }
     }
 
+    env.description = env.descr
     env.language = env.language || 'en' // TOOD: get from POSIX?
     format       = env.format || 'tree'
 

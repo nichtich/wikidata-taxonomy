@@ -31,6 +31,7 @@ $ wdtaxonomy
     -V, --version                        output the version number
     -b, --brief                          don't count instance and sites
     -c, --children                       get direct subclasses only
+    -d, --descr                          include item descriptions
     -f, --format <tree|csv|json|ndjson>  output format
     -i, --instances                      include instances (tree format)
     -l, --language <code>                language to get labels in
@@ -60,53 +61,57 @@ instance this command lists a biological taxonomy of mammals:
 
 ### Query options
 
-#### brief
+#### brief (`-b`)
 
 Don't count instance and sites
 
-#### children
+#### children (`-c`)
 
 Get direct subclasses only
 
-#### instances
+#### descr (`-d`)
+
+Include item descriptions
+
+#### instances (`-i`)
 
 include instances (tree format)
 
-#### language
+#### language (`-l`)
 
 language to get labels in
 
-#### reverse
+#### reverse (`-r`)
 
 get superclasses instead
 
-#### total
+#### total (`-t`)
 
-count total number of instances
+count total (transitive) number of instances, including instances of subclasses
 
-#### post
+#### post (`-p`)
 
 use HTTP POST to disable caching
 
-#### sparql
+#### sparql (`-s`)
 
 Don't actually perform a query but print SPARQL query and exit
 
 ### Output options
 
-#### format
+#### format (`-f`)
 
 Output format
 
-#### colors
+#### no-colors (`-n`)
 
 disable color output
 
-#### output
+#### output (`-o`)
 
-write result to a file
+write result to a file given by name
 
-#### verbose
+#### verbose (`-v`)
 
 show verbose error messages
 
@@ -223,6 +228,12 @@ Option `--format json` serializes the taxonomy as JSON object with the following
 * narrower
 * broader
 * instances (if option `instances` is enabled)
+
+*This format may change in a future version!*
+
+## NDJSON format
+
+Option `--format ndjson` serializes the taxonomy in JSKOS format with one record per line.
 
 ## Specialized taxonomies
 
