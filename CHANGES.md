@@ -2,6 +2,11 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+## 0.3.3 (2017-08-19)
+
+* Add option `--descr` to include item descriptions
+* Add options to specify the query endpoint
+
 ## 0.3.2 (2017-03-06)
 
 * Fix option `--total`

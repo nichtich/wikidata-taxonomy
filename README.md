@@ -25,23 +25,28 @@ $ wdtaxonomy
 
   extract taxonomies from Wikidata
 
+
   Options:
 
-    -h, --help                           output usage information
-    -V, --version                        output the version number
     -b, --brief                          don't count instance and sites
     -c, --children                       get direct subclasses only
     -d, --descr                          include item descriptions
+    -e, --endpoint <url>                 SPARQL endpoint to query
     -f, --format <tree|csv|json|ndjson>  output format
+    -h, --help                           output usage information
     -i, --instances                      include instances (tree format)
     -l, --language <code>                language to get labels in
     -n, --no-colors                      disable color output
     -o, --output <file>                  write result to a file
+    -P, --property <id>                  hierarchy property (e.g. P279)
     -p, --post                           use HTTP POST to disable caching
     -r, --reverse                        get superclasses instead
     -s, --sparql                         print SPARQL query and exit
     -t, --total                          count total number of instances
+    -u, --user <name>                    user to the SPARQL endpoint
     -v, --verbose                        show verbose error messages
+    -V, --version                        output the version number
+    -w, --password <string>              password to the SPARQL endpoint
 ```
 
 The first arguments needs to be a Wikidata identifier to be used as root of the taxonomy. For instance extract a taxonomy of planets ([Q634](https://www.wikidata.org/wiki/Q634)):
@@ -73,17 +78,21 @@ Get direct subclasses only
 
 Include item descriptions
 
+#### endpoint (`-e`)
+
+SPARQL endpoint to query (default: <https://query.wikidata.org/sparql>)
+
 #### instances (`-i`)
 
 include instances (tree format)
 
 #### language (`-l`)
 
-language to get labels in
+language to get labels in (default: `en`)
 
 #### reverse (`-r`)
 
-get superclasses instead
+get superclasses instead of subclasses up to the root
 
 #### total (`-t`)
 
@@ -96,6 +105,14 @@ use HTTP POST to disable caching
 #### sparql (`-s`)
 
 Don't actually perform a query but print SPARQL query and exit
+
+#### user (`-u`)
+
+User to the SPARQL endpoint
+
+#### password (`-w`)
+
+Password to the SPARQL endpoint
 
 ### Output options
 
