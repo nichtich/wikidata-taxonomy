@@ -13,6 +13,7 @@
     "url": "git+https://github.com/nichtich/wikidata-taxonomy.git"
   },
   "scripts": {
+    "lint": "./node_modules/standard/bin/cmd.js *.js lib/*.js",
     "test": "./node_modules/.bin/mocha --reporter spec --no-colors"
   },
   "bugs": {
