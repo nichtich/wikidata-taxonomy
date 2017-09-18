@@ -3,13 +3,14 @@ var wdt    = require('../lib/wikidata-taxonomy.js')
 
 describe('wikidata-taxonomy library', () => {
   it('should export serializers', () => {
-    expect(wdt.serializer.csv).to.be.function  
-    expect(wdt.serializer.json).to.be.function  
-    expect(wdt.serializer.tree).to.be.function  
+    expect(wdt.serialize.csv).to.be.function  
+    expect(wdt.serialize.json).to.be.function  
+    expect(wdt.serialize.tree).to.be.function  
+    expect(wdt.serialize.json).to.be.function  
+    expect(wdt.serialize.ndjson).to.be.function  
   })
-  it('should export query, taxonomy & serialize', () => {
+  it('should export query, taxonomy', () => {
     expect(wdt.query).to.be.function  
     expect(wdt.taxonomy).to.be.function  
-    expect(wdt.serialize).to.be.function  
   })
 })

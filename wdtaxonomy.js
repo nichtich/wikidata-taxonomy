@@ -35,6 +35,10 @@ program
   .option('-w, --password <string>', 'password to the SPARQL endpoint')
   .description('extract taxonomies from Wikidata')
   .action(function (wid, env) {
+    var serializeOptions = {
+      colors: env.colors
+    }
+
     if (!env.colors) {
       chalk = new chalk.constructor({enabled: false})
     }
@@ -92,7 +96,8 @@ program
     } else {
       wdt.taxonomy(id, env)
         .then(taxonomy => {
-          out(env.output).write(wdt.serialize(taxonomy, format))
+          const serialize = wdt.serialize[format] || wdt.serialize.tree
+          serialize(taxonomy, out(env.output), serializeOptions)
         })
         .catch(e => {
           error(2, env.verbose && e.stack ? e.stack : e.message)

@@ -297,6 +297,18 @@ necesarrily return the same results:
 
     $ wdtaxonomy Q33767 -P 527
 
+## Usage as module
+
+~~~json
+const wdt = require('wikidata-taxonomy')
+
+// serialize taxonomy to stream
+wdt.serialize.csv(taxonomy, process.stdout)
+wdt.serialize.text(taxonomy, process.stdout, {colors: true})
+wdt.serialize.json(taxonomy, process.stdout)
+wdt.serialize.ndjson(taxonomy, process.stdout)
+~~~
+
 ## Release notes
 
 Release notes are listed in file [CHANGES.md](https://github.com/nichtich/wikidata-taxonomy/blob/master/CHANGES.md#changelog) in the source code repository.

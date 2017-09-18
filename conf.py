@@ -40,3 +40,15 @@ latex_documents = [
 conf = package.get('conf.py') or []
 for key, value in conf.items():
     exec("%s=%s" % (key,repr(value)))
+
+from recommonmark.transform import AutoStructify
+
+# app setup hook
+# <see https://recommonmark.readthedocs.io/en/latest/>
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+            'url_resolver': lambda url: github_doc_root + url,
+            'auto_toc_tree_section': False,#'Contents',
+            }, True)
+    app.add_transform(AutoStructify)
+
