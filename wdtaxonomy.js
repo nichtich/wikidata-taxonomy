@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-// dependencies
+const program = require('commander')
+const { normalizeId } = require('wikidata-sdk')
+const { queryTaxonomy, serializeTaxonomy, sparqlQueries } = require('./index.js')
+
 var chalk = require('chalk')
-var program = require('commander')
-var wdt = require('./lib/wikidata-taxonomy.js')
 
 // print error and exit
 function error (code) {
@@ -44,8 +45,10 @@ program
     }
 
     wid = wid.replace(/^.*[^0-9A-Z]([QP][0-9]+)([^0-9].*)?$/i, '$1')
-    var id = wdt.normalizeId(wid)
-    if (id === undefined) {
+
+    try {
+      var id = normalizeId(wid)
+    } catch (err) {
       error(1, 'invalid id: %s', wid)
     }
 
@@ -59,8 +62,6 @@ program
     }
 
     env.description = env.descr
-    env.language = env.language || 'en' // TOOD: get from POSIX?
-    env.endpoint = env.endpoint || 'https://query.wikidata.org/sparql'
     const format = env.format || 'tree'
 
     if (!format.match(/^(tree|csv|json|ndjson)$/)) {
@@ -91,12 +92,12 @@ program
     }
 
     if (env.sparql) {
-      var queries = wdt.sparql.queries(id, env)
+      var queries = sparqlQueries(id, env)
       out(env.output).write(queries.join('\n') + '\n')
     } else {
-      wdt.taxonomy(id, env)
+      queryTaxonomy(id, env)
         .then(taxonomy => {
-          const serialize = wdt.serialize[format] || wdt.serialize.tree
+          const serialize = serializeTaxonomy[format] || serializeTaxonomy.tree
           serialize(taxonomy, out(env.output), serializeOptions)
         })
         .catch(e => {

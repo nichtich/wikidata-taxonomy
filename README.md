@@ -300,14 +300,20 @@ necesarrily return the same results:
 ## Usage as module
 
 ~~~json
-const wdt = require('wikidata-taxonomy')
+const { queryTaxonomy, serializeTaxonomy } = require('wikidata-taxonomy')
 
 // serialize taxonomy to stream
-wdt.serialize.csv(taxonomy, process.stdout)
-wdt.serialize.text(taxonomy, process.stdout, {colors: true})
-wdt.serialize.json(taxonomy, process.stdout)
-wdt.serialize.ndjson(taxonomy, process.stdout)
+serializeTaxonomy.csv(taxonomy, process.stdout)
+serializeTaxonomy.text(taxonomy, process.stdout, {colors: true})
+serializeTaxonomy.json(taxonomy, process.stdout)
+serializeTaxonomy.ndjson(taxonomy, process.stdout)
 ~~~
+
+## Usage in web applications
+
+Requires wikidata-sdk and jQuery (but no other dependencies).
+
+See directory `example` for a demo.
 
 ## Release notes
 
