@@ -2,6 +2,12 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# 0.4.1 (2017-09-20)
+
+* Refactor to be used as node and browserify module
+* Limit NDJSON to classes (#14)
+* Raise requirement to node 6 
+
 ## 0.3.3 (2017-08-19)
 
 * Add option `--descr` to include item descriptions
