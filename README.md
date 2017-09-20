@@ -6,7 +6,7 @@ Command-line tool to extract taxonomies from [Wikidata](https://wikidata.org).
 
 ## Installation
 
-wikidata-taxonomy requires at least [NodeJs](https://nodejs.org) version 4.
+wikidata-taxonomy requires at least [NodeJs](https://nodejs.org) version 6.
 
 Install globally to make command `wdtaxonomy` accessible from your shell `$PATH`:
 
