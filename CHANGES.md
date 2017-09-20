@@ -2,6 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# 0.4.2 (2017-09-20)
+
+* Fix CSV output
+
 # 0.4.1 (2017-09-20)
 
 * Refactor to be used as node and browserify module
