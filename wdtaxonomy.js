@@ -25,6 +25,7 @@ program
   .option('-i, --instances', 'include instances (tree format)')
   .option('-l, --language <code>', 'language to get labels in')
   .option('-n, --no-colors', 'disable color output')
+  .option('--colors', 'enable color output')
   .option('-o, --output <file>', 'write result to a file')
   .option('-P, --property <id>', 'hierarchy property (e.g. P279)')
   .option('-p, --post', 'use HTTP POST to disable caching')
