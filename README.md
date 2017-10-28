@@ -36,6 +36,7 @@ $ wdtaxonomy
     -h, --help                           output usage information
     -i, --instances                      include instances (tree format)
     -l, --language <code>                language to get labels in
+    -m, --mappings <id>                  mappings property (e.g. P1709)
     -n, --no-colors                      disable color output
     -o, --output <file>                  write result to a file
     -P, --property <id>                  hierarchy property (e.g. P279)
@@ -90,6 +91,10 @@ include instances (tree format)
 
 language to get labels in (default: `en`)
 
+#### mappings (`-m`)
+
+lookup mappings based on a given property such as P1709 (equivalent class)
+
 #### reverse (`-r`)
 
 get superclasses instead of subclasses up to the root
@@ -122,7 +127,7 @@ Output format
 
 #### no-colors (`-n`)
 
-disable color output
+disable color output. It's also possible to enforce color with `--color`
 
 #### output (`-o`)
 

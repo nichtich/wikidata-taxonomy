@@ -2,6 +2,11 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# 0.4.2 (2017-10-28)
+
+* Add option to include mappings (expect in CSV output)
+* Fix CSV output (again)
+
 # 0.4.2 (2017-09-20)
 
 * Fix CSV output
