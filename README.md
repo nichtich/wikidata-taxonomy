@@ -36,7 +36,7 @@ $ wdtaxonomy
     -h, --help                           output usage information
     -i, --instances                      include instances (tree format)
     -l, --language <code>                language to get labels in
-    -m, --mappings <id>                  mappings property (e.g. P1709)
+    -m, --mappings <ids>                 mapping properties (e.g. P1709)
     -n, --no-colors                      disable color output
     -o, --output <file>                  write result to a file
     -P, --property <id>                  hierarchy property (e.g. P279)
@@ -93,7 +93,7 @@ language to get labels in (default: `en`)
 
 #### mappings (`-m`)
 
-lookup mappings based on a given property such as P1709 (equivalent class)
+lookup mappings based on given comma-separated properties such as P1709 (equivalent class)
 
 #### reverse (`-r`)
 

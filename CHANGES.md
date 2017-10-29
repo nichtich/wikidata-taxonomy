@@ -2,6 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# NEXT
+
+* Support multiple mapping properties (#23)
+
 # 0.4.2 (2017-10-28)
 
 * Add option to include mappings (expect in CSV output)

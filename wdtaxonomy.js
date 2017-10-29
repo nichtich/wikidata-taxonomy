@@ -24,7 +24,7 @@ program
   .option('-f, --format <tree|csv|json|ndjson>', 'output format')
   .option('-i, --instances', 'include instances (tree format)')
   .option('-l, --language <code>', 'language to get labels in')
-  .option('-m, --mappings <id>', 'mappings property (e.g. P1709)')
+  .option('-m, --mappings <ids>', 'mapping properties (e.g. P1709)')
   .option('-n, --no-colors', 'disable color output')
   .option('-o, --output <file>', 'write result to a file')
   .option('-P, --property <id>', 'hierarchy property (e.g. P279)')
