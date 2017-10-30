@@ -69,12 +69,8 @@ program
       error(1, 'unsupported format: %s', format)
     }
 
-    if (env.instances && env.reverse) {
-      error(1, 'option instances and reverse cannot be specified together')
-    }
-
     env.property = env.property || ''
-    var match = env.property.match(/^([pP]?([0-9]+))?(\/[pP]?([0-9]+))?/)
+    var match = env.property.match(/^([pP]?([0-9]+))?([\/,][pP]?([0-9]+))?/)
     if (match) {
       var qid = id.substr(0, 1) === 'Q'
       env.property = [
@@ -82,7 +78,7 @@ program
         'P' + (match[4] || '31') // TODO: default value for properties (?)
       ]
     } else {
-      error(1, 'property must be specified like P279 or P279/P31')
+      error(1, 'property must be specified like P279 or P279,P31')
     }
 
     out = function (file) {
