@@ -243,19 +243,35 @@ subclass of "terrestrial planet" where it is marked by "`==`" instead of
 
 ### JSON format
 
-Option `--format json` serializes the taxonomy as JSON object with the following fields:
-
-* root: Wikidata identifier of the root item/property
-* items: object with Wikidata items/properties, indexed by their identifier
-* narrower
-* broader
-* instances (if option `instances` is enabled)
-
-*This format may change in a future version!*
+Option `--format json` serializes the taxonomy as JSON object. The format is only used internally and may change. 
 
 ## NDJSON format
 
-Option `--format ndjson` serializes the taxonomy in JSKOS format with one record per line.
+Option `--format ndjson` serializes the taxonomy in [JSKOS format](http://gbv.github.io/jskos/) with one record per line, such as the following example:
+
+~~~json
+{
+  "uri": "http://www.wikidata.org/entity/Q17362350",
+  "notation": [ "Q17362350" ],
+  "prefLabel": {
+    "en": "planet of the Solar System"
+  },
+  "scopeNote": {
+    "en": [ "inner and outer planets of our solar system" ]
+  }
+  "broader": [
+    { "uri": "http://www.wikidata.org/entity/Q634" }
+  ],
+  "narrower": [
+    { "uri": "http://www.wikidata.org/entity/Q30014" },
+    { "uri": "http://www.wikidata.org/entity/Q3504248" }
+  ]
+}
+~~~
+
+In addition the field `identifier` contains a list of mapped URIs (option `-m`) if available.
+
+Instances are not included in NDJSON format.
 
 ## Specialized taxonomies
 
@@ -343,3 +359,8 @@ Related tools
   command line tools for Wikidata
 * [taxonomy browser](http://sergestratan.bitbucket.org/) is a web application
   based on Wikidata dumps
+
+Publications
+
+* Jakob Voß (2016): *Classification of Knowledge Organization Systems with Wikidata*. CEUR Workshop Proceedings 1676. <http://ceur-ws.org/Vol-1676/paper2.pdf> (=[Q27261879](http://www.wikidata.org/entity/Q27261879))
+
