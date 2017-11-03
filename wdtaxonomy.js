@@ -70,7 +70,7 @@ program
     }
 
     env.property = env.property || ''
-    var match = env.property.match(/^([pP]?([0-9]+))?([\/,][pP]?([0-9]+))?/)
+    var match = env.property.match(/^([pP]?([0-9]+))?([/,][pP]?([0-9]+))?/)
     if (match) {
       var qid = id.substr(0, 1) === 'Q'
       env.property = [
