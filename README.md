@@ -93,7 +93,12 @@ language to get labels in (default: `en`)
 
 #### mappings (`-m`)
 
-lookup mappings based on given comma-separated properties such as P1709 (equivalent class)
+lookup mappings based on given comma-separated properties such as P1709 (equivalent class). The following keywords can be used as shortcuts:
+
+* `equal` or `=`: equivalent property (P1628), equivalent class (P1709), and exact match (P2888)
+* `broader`: external superproperty (P2235)
+* `narrower`: narrower external class (P3950), external subproperty (P2236)
+* `all` all properties for ontology mapping (instances of Q30249126)
 
 #### reverse (`-r`)
 
