@@ -256,11 +256,27 @@ subclass of "terrestrial planet" where it is marked by "`==`" instead of
 
 ### JSON format
 
-Option `--format json` serializes the taxonomy as JSON object. The format is only used internally and may change. 
+Option `--format json` serializes the taxonomy as JSON object. The format follows specification of [JSKOS Concept Schemes](https://gbv.github.io/jskos/jskos.html#concept-schemes):
 
-## NDJSON format
+~~~json
+{
+  "type": [ "http://www.w3.org/2004/02/skos/core#ConceptScheme" ],
+  "modified": "2017-11-06T10:25:54.966Z",
+  "license": [
+    {
+      "uri": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "notation": [ "CC0" ]
+    }
+  ],
+  "languages": [ "en" ],
+  "topConcepts": [
+    { "uri": "http://www.wikidata.org/entity/Q17362350" }
+  ],
+  "concepts": [ ]
+}
+~~~
 
-Option `--format ndjson` serializes the taxonomy in [JSKOS format](http://gbv.github.io/jskos/) with one record per line, such as the following example:
+Field `concepts` contains an array of all extracted Wikidata entities (usually classes and instances) as [JSKOS Concepts](https://gbv.github.io/jskos/jskos.html#concepts):
 
 ~~~json
 {
@@ -282,9 +298,9 @@ Option `--format ndjson` serializes the taxonomy in [JSKOS format](http://gbv.gi
 }
 ~~~
 
-In addition the field `identifier` contains a list of mapped URIs (option `-m`) if available.
+## NDJSON format
 
-Instances are not included in NDJSON format.
+Option `--format ndjson` serializes JSON field `concepts` with one record per line.
 
 ## Specialized taxonomies
 

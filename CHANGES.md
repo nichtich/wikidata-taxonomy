@@ -2,6 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# 0.5.1
+
+* Use JSKOS as JSON output format (#25)
+
 # 0.5.0 (2017-11-05)
 
 * Support multiple mapping properties, including shortcuts (#23)
