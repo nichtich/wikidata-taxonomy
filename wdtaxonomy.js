@@ -17,7 +17,7 @@ function error (code) {
 program
   .version(require('./package.json').version)
   .arguments('<id>')
-  .option('-b, --brief', 'don\'t count instance and sites')
+  .option('-b, --brief', 'omit counting instances and sites')
   .option('-c, --children', 'get direct subclasses only')
   .option('-d, --descr', 'include item descriptions')
   .option('-e, --endpoint <url>', 'SPARQL endpoint to query')
