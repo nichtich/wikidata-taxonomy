@@ -62,13 +62,64 @@ Taxonomy extraction and output can be controlled by several [options](#options).
 
 ### Examples
 
-Biological taxonomy of mammals:
+*Direct subclasses of planet (Q634) with description and mappings:*
 
-    $ wdtaxonomy.js Q7377 --property P171 --brief
+    $ wdtaxonomy.js Q634 -c -d -m =
 
-Property constraints with number of properties that have each constraint:
+The hierarchy properties [P279](http://www.wikidata.org/entity/P279) ("subclass
+of") and [P31](http://www.wikidata.org/entity/P31) ("instance of") to build
+taxonomies from can be changed with option `property` (`-P`).
 
-    $ wdtaxonomy -P 279,2302 Q21502402
+*Members of (P463) the European Union (Q458):*
+
+    $ wdtaxonomy Q458 -P P463
+
+*Members of (P463) the European Union (Q458) and number of its citizens in
+Wikidata (P27):*
+
+    $ wdtaxonomy Q458 -P 463/27
+
+*Wikiversity (Q370) editions mapped to their homepage URL (P856):*
+
+    $ wdtaxonomy Q370 -i -m P856
+
+*Biological taxonomy of mammals (Q7377):*
+
+    $ wdtaxonomy Q7377 -P P171 --brief
+
+*Property constraints (Q21502402) with number of properties that have each constraint:*
+
+    $ wdtaxonomy Q21502402 -P 279,2302 
+
+As Wikidata is no strict ontology, subproperties are not factored in. For
+instance this query does not include members of the European Union although
+P463 is a subproperty of P361.
+
+*Parts of (P361) the European Union (Q458):*
+
+    $ wdtaxonomy Q458 -P P361
+
+A taxonomy of subproperties can be queried like taxonomies of items. The
+hierarchy property is set to P1647 ("subproperty of") by default:
+
+    $ wdtaxonomy P361
+    $ wdtaxonomy P361 -P P1647  # equivalent
+
+*Subproperties of "part of" (P361) and which of them have an inverse property
+(P1696):*
+
+    $ wdtaxonomy P361 -P P1647/P1696
+
+Inverse properties are neither factored in so queries like these do not
+necesarrily return the same results:
+
+*What hand (Q33767) is part of (P361):*
+
+    $ wdtaxonomy Q33767 -P 361 -r
+
+*What parts the hand (Q33767) has (P527):*
+
+    $ wdtaxonomy Q33767 -P 527
 
 ## Options
 
@@ -92,7 +143,7 @@ SPARQL endpoint to query (default: <https://query.wikidata.org/sparql>)
 
 #### instances (`-i`)
 
-include instances (tree format)
+include instances
 
 #### language (`-l`)
 
@@ -207,6 +258,82 @@ planet (Q634) •202 ×7 ↑
 ...
 ```
 
+### JSON format
+
+Option `--format json` serializes the taxonomy as JSON object. The format follows specification of [JSKOS Concept Schemes](https://gbv.github.io/jskos/jskos.html#concept-schemes):
+
+~~~json
+{
+  "type": [ "http://www.w3.org/2004/02/skos/core#ConceptScheme" ],
+  "modified": "2017-11-06T10:25:54.966Z",
+  "license": [
+    {
+      "uri": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "notation": [ "CC0" ]
+    }
+  ],
+  "languages": [ "en" ],
+  "topConcepts": [
+    { "uri": "http://www.wikidata.org/entity/Q17362350" }
+  ],
+  "concepts": [ ]
+}
+~~~
+
+Field `concepts` contains an array of all extracted Wikidata entities (usually classes and instances) as [JSKOS Concepts](https://gbv.github.io/jskos/jskos.html#concepts):
+
+~~~json
+{
+  "uri": "http://www.wikidata.org/entity/Q17362350",
+  "notation": [ "Q17362350" ],
+  "prefLabel": {
+    "en": "planet of the Solar System"
+  },
+  "scopeNote": {
+    "en": [ "inner and outer planets of our solar system" ]
+  }
+  "broader": [
+    { "uri": "http://www.wikidata.org/entity/Q634" }
+  ],
+  "narrower": [
+    { "uri": "http://www.wikidata.org/entity/Q30014" },
+    { "uri": "http://www.wikidata.org/entity/Q3504248" }
+  ]
+}
+~~~
+
+Instances (option `--instances`) are linked via field `subjectOf` the same way as field `broader` and `narrower`.
+
+Mappings (option `--mappings`) are stored in field `mappings` as array of [JSKOS Concept Mappings](https://gbv.github.io/jskos/jskos.html#concept-mappings):
+
+~~~json
+[
+  {
+    "from": {
+      "memberSet": [
+        { "uri": "http://www.wikidata.org/entity/Q634" }
+      ]
+    },
+    "to": {
+      "memberSet": [
+        { "uri": "http://dbpedia.org/ontology/Planet" }
+      ]
+    },
+    "type": [
+      "http://www.w3.org/2004/02/skos/core#exactMatch",
+      "http://www.w3.org/2002/07/owl#equivalentClass",
+      "http://www.wikidata.org/entity/P1709"
+    ]
+  }
+]
+~~~
+
+The mapping type is given in field `type` with the Wikidata property URI as last array element and the SKOS mapping relation URI as first.
+
+## NDJSON format
+
+Option `--format ndjson` serializes JSON field `concepts` with one record per line.
+
 ### CSV format
 
 The CSV format ("`--format csv`") is optimized for comparing differences in
@@ -253,99 +380,6 @@ another superclass indicated by "`^`". Both "circumbinary planet" and
 "super-Earth" are subclasses of "extrasolar planet". The latter also occurs as
 subclass of "terrestrial planet" where it is marked by "`==`" instead of
 "`--`".
-
-### JSON format
-
-Option `--format json` serializes the taxonomy as JSON object. The format follows specification of [JSKOS Concept Schemes](https://gbv.github.io/jskos/jskos.html#concept-schemes):
-
-~~~json
-{
-  "type": [ "http://www.w3.org/2004/02/skos/core#ConceptScheme" ],
-  "modified": "2017-11-06T10:25:54.966Z",
-  "license": [
-    {
-      "uri": "http://creativecommons.org/publicdomain/zero/1.0/",
-      "notation": [ "CC0" ]
-    }
-  ],
-  "languages": [ "en" ],
-  "topConcepts": [
-    { "uri": "http://www.wikidata.org/entity/Q17362350" }
-  ],
-  "concepts": [ ]
-}
-~~~
-
-Field `concepts` contains an array of all extracted Wikidata entities (usually classes and instances) as [JSKOS Concepts](https://gbv.github.io/jskos/jskos.html#concepts):
-
-~~~json
-{
-  "uri": "http://www.wikidata.org/entity/Q17362350",
-  "notation": [ "Q17362350" ],
-  "prefLabel": {
-    "en": "planet of the Solar System"
-  },
-  "scopeNote": {
-    "en": [ "inner and outer planets of our solar system" ]
-  }
-  "broader": [
-    { "uri": "http://www.wikidata.org/entity/Q634" }
-  ],
-  "narrower": [
-    { "uri": "http://www.wikidata.org/entity/Q30014" },
-    { "uri": "http://www.wikidata.org/entity/Q3504248" }
-  ]
-}
-~~~
-
-## NDJSON format
-
-Option `--format ndjson` serializes JSON field `concepts` with one record per line.
-
-## Specialized taxonomies
-
-The hierarchy properties [P279](http://www.wikidata.org/entity/P279) ("subclass
-of") and [P31](http://www.wikidata.org/entity/P31) ("instance of") to build
-taxonomies from can be changed with option `property` (`-P`).
-
-*Members of (P463) the European Union (Q458):*
-
-    $ wdtaxonomy Q458 -P P463
-
-*Members of (P463) the European Union (Q458) and number of its citizens in
-Wikidata (P27):*
-
-    $ wdtaxonomy Q458 -P 463/27
-
-As Wikidata is no strict ontology, subproperties are not factored in. For
-instance this query does not include members of the European Union although
-P463 is a subproperty of P361.
-
-*Parts of (P361) the European Union (Q458):*
-
-    $ wdtaxonomy Q458 -P P361
-
-A taxonomy of subproperties can be queried like taxonomies of items. The
-hierarchy property is set to P1647 ("subproperty of") by default:
-
-    $ wdtaxonomy P361
-    $ wdtaxonomy P361 -P P1647  # equivalent
-
-*Subproperties of "part of" (P361) and which of them have an inverse property
-(P1696):*
-
-    $ wdtaxonomy P361 -P P1647/P1696
-
-Inverse properties are neither factored in so queries like these do not
-necesarrily return the same results:
-
-*What hand (Q33767) is part of (P361):*
-
-    $ wdtaxonomy Q33767 -P 361 -r
-
-*What parts the hand (Q33767) has (P527):*
-
-    $ wdtaxonomy Q33767 -P 527
 
 ## Usage as module
 
