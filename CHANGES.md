@@ -2,6 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# 0.5.2
+
+* Rename option `-e` and `-l` long names equal to wikidata-cli
+
 # 0.5.1 (2017-11-07)
 
 * Use JSKOS as JSON output format (#25)

@@ -27,14 +27,14 @@ $ wdtaxonomy
 
   Options:
 
+    -V, --version                        output the version number
     -b, --brief                          omit counting instances and sites
     -c, --children                       get direct subclasses only
     -d, --descr                          include item descriptions
-    -e, --endpoint <url>                 SPARQL endpoint to query
+    -e, --sparql-endpoint <url>          customize the SPARQL endpoint
     -f, --format <tree|csv|json|ndjson>  output format
-    -h, --help                           output usage information
     -i, --instances                      include instances (tree format)
-    -l, --language <code>                language to get labels in
+    -l, --lang <lang>                    specify the language to use
     -m, --mappings <ids>                 mapping properties (e.g. P1709)
     -n, --no-colors                      disable color output
     -o, --output <file>                  write result to a file
@@ -44,9 +44,9 @@ $ wdtaxonomy
     -s, --sparql                         print SPARQL query and exit
     -t, --total                          count total number of instances
     -u, --user <name>                    user to the SPARQL endpoint
-    -v, --verbose                        show verbose error messages
-    -V, --version                        output the version number
+    -v, --verbose                        make the output more verbose
     -w, --password <string>              password to the SPARQL endpoint
+    -h, --help                           output usage information
 ```
 
 The first arguments needs to be a Wikidata identifier to be used as root of the taxonomy. For instance extract a taxonomy of planets ([Q634]):
@@ -141,7 +141,7 @@ Get direct subclasses only
 
 Include item descriptions
 
-#### endpoint (`-e`)
+#### sparql-endpoint (`-e`)
 
 SPARQL endpoint to query (default: <https://query.wikidata.org/sparql>)
 
@@ -149,7 +149,7 @@ SPARQL endpoint to query (default: <https://query.wikidata.org/sparql>)
 
 include instances
 
-#### language (`-l`)
+#### lang (`-l`)
 
 language to get labels in (default: `en`)
 

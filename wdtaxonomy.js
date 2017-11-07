@@ -20,10 +20,10 @@ program
   .option('-b, --brief', 'omit counting instances and sites')
   .option('-c, --children', 'get direct subclasses only')
   .option('-d, --descr', 'include item descriptions')
-  .option('-e, --endpoint <url>', 'SPARQL endpoint to query')
+  .option('-e, --sparql-endpoint <url>', 'customize the SPARQL endpoint') // same in wikidata-cli
   .option('-f, --format <tree|csv|json|ndjson>', 'output format')
   .option('-i, --instances', 'include instances (tree format)')
-  .option('-l, --language <code>', 'language to get labels in')
+  .option('-l, --lang <lang>', 'specify the language to use') // same as wikidata-cli
   .option('-m, --mappings <ids>', 'mapping properties (e.g. P1709)')
   .option('-n, --no-colors', 'disable color output')
   .option('-o, --output <file>', 'write result to a file')
@@ -33,7 +33,7 @@ program
   .option('-s, --sparql', 'print SPARQL query and exit')
   .option('-t, --total', 'count total number of instances')
   .option('-u, --user <name>', 'user to the SPARQL endpoint')
-  .option('-v, --verbose', 'show verbose error messages')
+  .option('-v, --verbose', 'make the output more verbose') // same in wikidata-cli
   .option('-w, --password <string>', 'password to the SPARQL endpoint')
   .description('extract taxonomies from Wikidata')
   .action(function (wid, env) {
