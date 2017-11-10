@@ -18,6 +18,8 @@ program
   .version(require('./package.json').version)
   .arguments('<id>')
   .option('-b, --brief', 'omit counting instances and sites')
+  .option('--no-sites', 'omit counting sites')
+  .option('--sites', 'count sites (enabled by default)')
   .option('-c, --children', 'get direct subclasses only')
   .option('-d, --descr', 'include item descriptions')
   .option('-e, --sparql-endpoint <url>', 'customize the SPARQL endpoint') // same in wikidata-cli
@@ -26,6 +28,7 @@ program
   .option('-l, --lang <lang>', 'specify the language to use') // same as wikidata-cli
   .option('-m, --mappings <ids>', 'mapping properties (e.g. P1709)')
   .option('-n, --no-colors', 'disable color output')
+  .option('--color', 'enforce color output')
   .option('-o, --output <file>', 'write result to a file')
   .option('-P, --property <id>', 'hierarchy property (e.g. P279)')
   .option('-p, --post', 'use HTTP POST to disable caching')
@@ -37,13 +40,7 @@ program
   .option('-w, --password <string>', 'password to the SPARQL endpoint')
   .description('extract taxonomies from Wikidata')
   .action(function (wid, env) {
-    var serializeOptions = {
-      colors: env.colors
-    }
-
-    if (!env.colors) {
-      chalk = new chalk.constructor({enabled: false})
-    }
+    chalk = env.colors ? chalk : require('./lib/nochalk.js')
 
     wid = wid.replace(/^.*[^0-9A-Z]([QP][0-9]+)([^0-9].*)?$/i, '$1')
 
@@ -95,7 +92,7 @@ program
       queryTaxonomy(id, env)
         .then(taxonomy => {
           const serialize = serializeTaxonomy[format] || serializeTaxonomy.tree
-          serialize(taxonomy, out(env.output), serializeOptions)
+          serialize(taxonomy, out(env.output), { chalk: chalk })
         })
         .catch(e => {
           error(2, env.verbose && e.stack ? e.stack : e.message)
