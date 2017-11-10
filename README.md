@@ -160,6 +160,8 @@ lookup mappings based on given comma-separated properties such as [P1709] (equiv
 * `equal` or `=`: equivalent property ([P1628]), equivalent class ([P1709]), and exact match ([P2888])
 * `broader`: external superproperty ([P2235])
 * `narrower`: narrower external class ([P3950]), external subproperty ([P2236])
+* `class`: properties for mapping classes
+* `property`: properties for mapping properties
 * `all` all properties for ontology mapping (instances of Q30249126)
 
 #### reverse (`-r`)
@@ -420,6 +422,8 @@ Release notes are listed in file [CHANGES.md](https://github.com/nichtich/wikida
 * [wikidata-cli] provide more generic command line tools for Wikidata
 * [taxonomy browser](http://sergestratan.bitbucket.org/) is a web application
   based on Wikidata dumps
+* [Wikidata Graph Builder](https://angryloki.github.io/wikidata-graph-builder/) another web application
+
 
 [wikidata-cli]: https://npmjs.com/package/wikidata-cli
 
