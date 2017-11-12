@@ -41,7 +41,12 @@ program
   .option('-w, --password <string>', 'password to the SPARQL endpoint')
   .description('extract taxonomies from Wikidata')
   .action(function (wid, env) {
-    chalk = env.colors ? chalk : require('./lib/nochalk.js')
+    if (env.output === '-') {
+      env.output = undefined
+    }
+
+    chalk = env.colors && chalk.enabled && (env.color || env.output === undefined)
+          ? chalk : require('./lib/nochalk.js')
 
     wid = wid.replace(/^.*[^0-9A-Z]([QP][0-9]+)([^0-9].*)?$/i, '$1')
 
