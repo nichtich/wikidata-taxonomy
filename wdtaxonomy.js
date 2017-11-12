@@ -18,13 +18,12 @@ program
   .version(require('./package.json').version)
   .arguments('<id>')
   .option('-b, --brief', 'omit counting instances and sites')
-  .option('--no-sites', 'omit counting sites')
-  .option('--sites', 'count sites (enabled by default)')
   .option('-c, --children', 'get direct subclasses only')
   .option('-d, --descr', 'include item descriptions')
   .option('-e, --sparql-endpoint <url>', 'customize the SPARQL endpoint') // same in wikidata-cli
   .option('-f, --format <tree|csv|json|ndjson>', 'output format')
-  .option('-i, --instances', 'include instances (tree format)')
+  .option('-i, --instances', 'include instances')
+  .option('-I, --no-instancecount', 'omit counting instances')
   .option('-l, --lang <lang>', 'specify the language to use') // same as wikidata-cli
   .option('-m, --mappings <ids>', 'mapping properties (e.g. P1709)')
   .option('-n, --no-colors', 'disable color output')
@@ -34,6 +33,7 @@ program
   .option('-p, --post', 'use HTTP POST to disable caching')
   .option('-r, --reverse', 'get superclasses instead')
   .option('-s, --sparql', 'print SPARQL query and exit')
+  .option('-S, --no-sitecount', 'omit counting sites')
   .option('-t, --total', 'count total number of instances')
   .option('-u, --user <name>', 'user to the SPARQL endpoint')
   .option('-v, --verbose', 'make the output more verbose') // same in wikidata-cli
@@ -43,6 +43,11 @@ program
     chalk = env.colors ? chalk : require('./lib/nochalk.js')
 
     wid = wid.replace(/^.*[^0-9A-Z]([QP][0-9]+)([^0-9].*)?$/i, '$1')
+
+    if (env.brief) {
+      env.instancecount = false
+      env.sitecount = false
+    }
 
     try {
       var id = normalizeId(wid)

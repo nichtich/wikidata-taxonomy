@@ -2,6 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# 0.5.3
+
+* Add options `--no-instancecount` and `--no-sitecount`
+
 # 0.5.2 (2017-11-12)
 
 * Rename option `-e` and `-l` long names equal to wikidata-cli

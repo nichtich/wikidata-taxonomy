@@ -33,7 +33,8 @@ $ wdtaxonomy
     -d, --descr                          include item descriptions
     -e, --sparql-endpoint <url>          customize the SPARQL endpoint
     -f, --format <tree|csv|json|ndjson>  output format
-    -i, --instances                      include instances (tree format)
+    -i, --instances                      include instances
+    -I, --no-instancecount               omit counting instances
     -l, --lang <lang>                    specify the language to use
     -m, --mappings <ids>                 mapping properties (e.g. P1709)
     -n, --no-colors                      disable color output
@@ -42,6 +43,7 @@ $ wdtaxonomy
     -p, --post                           use HTTP POST to disable caching
     -r, --reverse                        get superclasses instead
     -s, --sparql                         print SPARQL query and exit
+    -S, --no-sitecount                   omit counting sites
     -t, --total                          count total number of instances
     -u, --user <name>                    user to the SPARQL endpoint
     -v, --verbose                        make the output more verbose
@@ -131,7 +133,7 @@ necesarrily return the same results:
 
 #### brief (`-b`)
 
-Don't count instance and sites
+Don't count instance and sites. Same as `-S/--no-sitecount` and `-I/--no-instancecount`.
 
 #### children (`-c`)
 
@@ -148,6 +150,10 @@ SPARQL endpoint to query (default: <https://query.wikidata.org/sparql>)
 #### instances (`-i`)
 
 include instances
+
+#### no-instancecount (`-I`)
+
+don't count number of instances
 
 #### lang (`-l`)
 
@@ -167,6 +173,10 @@ lookup mappings based on given comma-separated properties such as [P1709] (equiv
 #### reverse (`-r`)
 
 get superclasses instead of subclasses up to the root
+
+#### no-sitecount (`-I`)
+
+don't count number of sites
 
 #### total (`-t`)
 
