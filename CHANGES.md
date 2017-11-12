@@ -2,9 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
-# 0.5.3
+# 0.5.3 (2017-11-12)
 
 * Add options `--no-instancecount` and `--no-sitecount`
+* Add option `--uris` / `-U` to show full URIs (#28)
 
 # 0.5.2 (2017-11-12)
 

@@ -36,6 +36,7 @@ program
   .option('-S, --no-sitecount', 'omit counting sites')
   .option('-t, --total', 'count total number of instances')
   .option('-u, --user <name>', 'user to the SPARQL endpoint')
+  .option('-U, --uris', 'show full URIs in output formats')
   .option('-v, --verbose', 'make the output more verbose') // same in wikidata-cli
   .option('-w, --password <string>', 'password to the SPARQL endpoint')
   .description('extract taxonomies from Wikidata')
@@ -62,6 +63,11 @@ program
       if (!env.format && ['csv', 'json', 'ndjson'].indexOf(ext) >= 0) {
         env.format = ext
       }
+    }
+
+    const serializeOptions = {
+      chalk: chalk,
+      uris: env.uris
     }
 
     env.description = env.descr
@@ -97,7 +103,7 @@ program
       queryTaxonomy(id, env)
         .then(taxonomy => {
           const serialize = serializeTaxonomy[format] || serializeTaxonomy.tree
-          serialize(taxonomy, out(env.output), { chalk: chalk })
+          serialize(taxonomy, out(env.output), serializeOptions)
         })
         .catch(e => {
           error(2, env.verbose && e.stack ? e.stack : e.message)
