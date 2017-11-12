@@ -6,6 +6,7 @@ This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmj
 
 * Add options `--no-instancecount` and `--no-sitecount`
 * Add option `--uris` / `-U` to show full URIs (#28)
+* Colorize CSV format
 
 # 0.5.2 (2017-11-12)
 
