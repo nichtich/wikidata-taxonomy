@@ -30,6 +30,7 @@ $ wdtaxonomy
     -V, --version                        output the version number
     -b, --brief                          omit counting instances and sites
     -c, --children                       get direct subclasses only
+    -C, --color                          enable color output
     -d, --descr                          include item descriptions
     -e, --sparql-endpoint <url>          customize the SPARQL endpoint
     -f, --format <tree|csv|json|ndjson>  output format
@@ -64,7 +65,7 @@ To look up by label, use [wikidata-cli]:
 $ wdtaxonomy `wd id Planet`
 ```
 
-The extracted taxonomy is based on statements using the property "subclass of" ([P279]) or "subproperty of" ([P1647]) and additional statistics.  Option `--sparql` prints the SPARQL queries that are used.
+The extracted taxonomy is based on statements using the property "subclass of" ([P279]) or "subproperty of" ([P1647]) and additional statistics.  Option `--sparql` (or `-s`) prints the SPARQL queries that are used instead of executing them.
 
 Taxonomy extraction and output can be controlled by several [options](#options).
 
@@ -168,7 +169,7 @@ lookup mappings based on given comma-separated properties such as [P1709] (equiv
 * `narrower`: narrower external class ([P3950]), external subproperty ([P2236])
 * `class`: properties for mapping classes
 * `property`: properties for mapping properties
-* `all` all properties for ontology mapping (instances of Q30249126)
+* `all` all properties for ontology mapping (instances of [Q30249126])
 
 #### reverse (`-r`)
 
@@ -206,7 +207,11 @@ Output format
 
 #### no-colors (`-n`)
 
-disable color output. It's also possible to enforce color with `--color`
+disable color output
+
+#### color (`-C`)
+
+enable color output if it's disabled (e.g. when output is piped or written to a file)
 
 #### output (`-o`)
 

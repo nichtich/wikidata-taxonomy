@@ -19,6 +19,7 @@ program
   .arguments('<id>')
   .option('-b, --brief', 'omit counting instances and sites')
   .option('-c, --children', 'get direct subclasses only')
+  .option('-C, --color', 'enforce color output')
   .option('-d, --descr', 'include item descriptions')
   .option('-e, --sparql-endpoint <url>', 'customize the SPARQL endpoint') // same in wikidata-cli
   .option('-f, --format <tree|csv|json|ndjson>', 'output format')
@@ -27,7 +28,6 @@ program
   .option('-l, --lang <lang>', 'specify the language to use') // same as wikidata-cli
   .option('-m, --mappings <ids>', 'mapping properties (e.g. P1709)')
   .option('-n, --no-colors', 'disable color output')
-  .option('--color', 'enforce color output')
   .option('-o, --output <file>', 'write result to a file')
   .option('-P, --property <id>', 'hierarchy property (e.g. P279)')
   .option('-p, --post', 'use HTTP POST to disable caching')
@@ -45,7 +45,7 @@ program
       env.output = undefined
     }
 
-    chalk = env.colors && chalk.enabled && (env.color || env.output === undefined)
+    chalk = env.color || (env.colors && chalk.enabled && env.output === undefined)
           ? chalk : require('./lib/nochalk.js')
 
     wid = wid.replace(/^.*[^0-9A-Z]([QP][0-9]+)([^0-9].*)?$/i, '$1')
