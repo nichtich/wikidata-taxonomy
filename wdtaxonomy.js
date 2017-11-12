@@ -26,6 +26,7 @@ program
   .option('-i, --instances', 'include instances')
   .option('-I, --no-instancecount', 'omit counting instances')
   .option('-l, --lang <lang>', 'specify the language to use') // same as wikidata-cli
+  .option('-L, --no-labels', 'omit all labels')
   .option('-m, --mappings <ids>', 'mapping properties (e.g. P1709)')
   .option('-n, --no-colors', 'disable color output')
   .option('-o, --output <file>', 'write result to a file')

@@ -18,25 +18,28 @@ $ npm install -g wikidata-taxonomy
 
 This module provides the command `wdtaxonomy`. By default, a usage help is printed:
 
-```sh
+```
 $ wdtaxonomy
+
 
   Usage: wdtaxonomy [options] <id>
 
   extract taxonomies from Wikidata
+
 
   Options:
 
     -V, --version                        output the version number
     -b, --brief                          omit counting instances and sites
     -c, --children                       get direct subclasses only
-    -C, --color                          enable color output
+    -C, --color                          enforce color output
     -d, --descr                          include item descriptions
     -e, --sparql-endpoint <url>          customize the SPARQL endpoint
     -f, --format <tree|csv|json|ndjson>  output format
     -i, --instances                      include instances
     -I, --no-instancecount               omit counting instances
     -l, --lang <lang>                    specify the language to use
+    -L, --no-labels                      omit all labels
     -m, --mappings <ids>                 mapping properties (e.g. P1709)
     -n, --no-colors                      disable color output
     -o, --output <file>                  write result to a file
@@ -47,6 +50,7 @@ $ wdtaxonomy
     -S, --no-sitecount                   omit counting sites
     -t, --total                          count total number of instances
     -u, --user <name>                    user to the SPARQL endpoint
+    -U, --uris                           show full URIs in output formats
     -v, --verbose                        make the output more verbose
     -w, --password <string>              password to the SPARQL endpoint
     -h, --help                           output usage information
@@ -150,19 +154,23 @@ SPARQL endpoint to query (default: <https://query.wikidata.org/sparql>)
 
 #### instances (`-i`)
 
-include instances
+Include instances
 
 #### no-instancecount (`-I`)
 
-don't count number of instances
+Don't count number of instances
 
 #### lang (`-l`)
 
-language to get labels in (default: `en`)
+Language to get labels in (default: `en`)
+
+#### no-labels (`-L`)
+
+Omit all labels. This allows for querying larger taxonomies (several thousands of classes), especially if combined with option `--brief`.
 
 #### mappings (`-m`)
 
-lookup mappings based on given comma-separated properties such as [P1709] (equivalent class). The following keywords can be used as shortcuts:
+Lookup mappings based on given comma-separated properties such as [P1709] (equivalent class). The following keywords can be used as shortcuts:
 
 * `equal` or `=`: equivalent property ([P1628]), equivalent class ([P1709]), and exact match ([P2888])
 * `broader`: external superproperty ([P2235])
@@ -173,19 +181,19 @@ lookup mappings based on given comma-separated properties such as [P1709] (equiv
 
 #### reverse (`-r`)
 
-get superclasses instead of subclasses up to the root
+Get superclasses instead of subclasses up to the root
 
 #### no-sitecount (`-I`)
 
-don't count number of sites
+Don't count number of sites
 
 #### total (`-t`)
 
-count total (transitive) number of instances, including instances of subclasses
+Count total (transitive) number of instances, including instances of subclasses
 
 #### post (`-p`)
 
-use HTTP POST to disable caching
+Use HTTP POST to disable caching
 
 #### sparql (`-s`)
 
@@ -217,9 +225,13 @@ enable color output if it's disabled (e.g. when output is piped or written to a 
 
 write result to a file given by name
 
+#### uris (`-U`)
+
+Show full URIs in output formats, e.g. <http://www.wikidata.org/entity/Q1> instead of `Q1`
+
 #### verbose (`-v`)
 
-show verbose error messages
+Show verbose error messages
 
 ## Output formats
 

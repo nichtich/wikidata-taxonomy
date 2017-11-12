@@ -2,6 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# 0.?.?
+
+* Add option `--no-labels/-L` to omit labels (#30)
+
 # 0.5.4 (2017-11-12)
 
 * Add options `--no-instancecount` and `--no-sitecount`
