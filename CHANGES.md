@@ -2,15 +2,13 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
-# 0.5.3 (2017-11-12)
+# 0.5.4 (2017-11-12)
 
 * Add options `--no-instancecount` and `--no-sitecount`
 * Add option `--uris` / `-U` to show full URIs (#28)
-* Colorize CSV format
-
-# 0.5.2 (2017-11-12)
-
+* Add option shortcut `-C` for `--color`
 * Rename option `-e` and `-l` long names equal to wikidata-cli
+* Colorize CSV format
 * Fix bug in CSV output (#29)
 
 # 0.5.1 (2017-11-07)
