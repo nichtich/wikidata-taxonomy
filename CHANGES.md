@@ -2,9 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
-# 0.5.2
+# 0.5.2 (2017-11-12)
 
 * Rename option `-e` and `-l` long names equal to wikidata-cli
+* Fix bug in CSV output (#29)
 
 # 0.5.1 (2017-11-07)
 
