@@ -73,7 +73,9 @@ program
 
     const serializeOptions = {
       chalk: chalk,
-      uris: env.uris
+      uris: env.uris,
+      instancecount: env.instancecount,
+      sitecount: env.sitecount
     }
 
     env.description = env.descr
