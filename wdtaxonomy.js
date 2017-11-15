@@ -25,6 +25,7 @@ program
   .option('-f, --format <tree|csv|json|ndjson>', 'output format')
   .option('-i, --instances', 'include instances')
   .option('-I, --no-instancecount', 'omit counting instances')
+  .option('-j, --json', 'use JSON output format') // same as wikidata-cli
   .option('-l, --lang <lang>', 'specify the language to use') // same as wikidata-cli
   .option('-L, --no-labels', 'omit all labels')
   .option('-m, --mappings <ids>', 'mapping properties (e.g. P1709)')
@@ -63,6 +64,8 @@ program
     }
 
     var out = process.stdout
+
+    if (env.json) env.format = 'json'
 
     if (env.output) {
       var ext = env.output.split('.').pop()
