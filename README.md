@@ -38,6 +38,7 @@ $ wdtaxonomy
     -f, --format <tree|csv|json|ndjson>  output format
     -i, --instances                      include instances
     -I, --no-instancecount               omit counting instances
+    -j, --json                           use JSON output format
     -l, --lang <lang>                    specify the language to use
     -L, --no-labels                      omit all labels
     -m, --mappings <ids>                 mapping properties (e.g. P1709)
@@ -62,16 +63,9 @@ The first arguments needs to be a Wikidata identifier to be used as root of the 
 $ wdtaxonomy Q634
 ```
 
-To look up by label, use [wikidata-cli]:
+To look up by label, use [wikidata-cli] (e.g `wd id planet` or `wd f planet`).
 
-
-```sh
-$ wdtaxonomy `wd id Planet`
-```
-
-The extracted taxonomy is based on statements using the property "subclass of" ([P279]) or "subproperty of" ([P1647]) and additional statistics.  Option `--sparql` (or `-s`) prints the SPARQL queries that are used instead of executing them.
-
-Taxonomy extraction and output can be controlled by several [options](#options).
+The extracted taxonomy by default is based on statements using the property "subclass of" ([P279]) or "subproperty of" ([P1647]). Taxonomy extraction and output can be controlled by several [options](#options). Option `--sparql` (or `-s`) prints the underlying SPARQL queries instead of executing them.
 
 ### Examples
 
@@ -85,8 +79,7 @@ The hierarchy properties [P279] ("subclass of") and [P31] ("instance of") to bui
 
     $ wdtaxonomy Q458 -P P463
 
-**Members of ([P463]) the European Union ([Q458]) and number of its citizens in
-Wikidata ([P27]):**
+**Members of ([P463]) the European Union ([Q458]) and number of its citizens in Wikidata ([P27]):**
 
     $ wdtaxonomy Q458 -P 463/27
 
@@ -102,27 +95,22 @@ Wikidata ([P27]):**
 
     $ wdtaxonomy Q21502402 -P 279,2302 
 
-As Wikidata is no strict ontology, subproperties are not factored in. For
-instance this query does not include members of the European Union although
-P463 is a subproperty of P361.
+As Wikidata is no strict ontology, subproperties are not factored in. For instance this query does not include members of the European Union although [P463] is a subproperty of [P361].
 
 **Parts of ([P361]) the European Union ([Q458]):**
 
     $ wdtaxonomy Q458 -P P361
 
-A taxonomy of subproperties can be queried like taxonomies of items. The
-hierarchy property is set to P1647 ("subproperty of") by default:
+A taxonomy of subproperties can be queried like taxonomies of items. The hierarchy property is set to [P1647] ("subproperty of") by default:
 
     $ wdtaxonomy P361
     $ wdtaxonomy P361 -P P1647  # equivalent
 
-**Subproperties of "part of" ([P361]) and which of them have an inverse property
-([P1696]):**
+**Subproperties of "part of" ([P361]) and which of them have an inverse property ([P1696]):**
 
     $ wdtaxonomy P361 -P P1647/P1696
 
-Inverse properties are neither factored in so queries like these do not
-necesarrily return the same results:
+Inverse properties are neither factored in so queries like these do not necesarrily return the same results:
 
 **What hand ([Q33767]) is part of ([P361]):**
 
@@ -209,17 +197,21 @@ Password to the SPARQL endpoint
 
 ### Output options
 
+#### color (`-C`)
+
+enable color output if it's disabled (e.g. when output is piped or written to a file)
+
 #### format (`-f`)
 
 Output format
 
+#### json (`-j`)
+
+Use JSON output format. Same as `--format json` but shorter.
+
 #### no-colors (`-n`)
 
 disable color output
-
-#### color (`-C`)
-
-enable color output if it's disabled (e.g. when output is piped or written to a file)
 
 #### output (`-o`)
 
@@ -333,7 +325,30 @@ Field `concepts` contains an array of all extracted Wikidata entities (usually c
 }
 ~~~
 
-Instances (option `--instances`) are linked via field `subjectOf` the same way as field `broader` and `narrower`.
+Instances (option `--instances`) are linked via field `subjectOf` the same way as field `broader` and `narrower`. 
+
+The number of instances and sites, if counted is given as array of [JSKOS Concept Occurrences]((https://gbv.github.io/jskos/jskos.html#concept-occurrences) in field `occurrences`, each identified by subfield `relation`:
+
+~~~json
+
+{
+  "uri": "http://www.wikidata.org/entity/Q30014",
+  "notation": [ "Q30014" ],
+  "prefLabel": {
+    "en": "outer planet of the Solar system"
+  },
+  "occurrences": [
+    {
+      "relation": "http://www.wikidata.org/entity/P31",
+      "count": 4
+    },
+    {
+      "relation": "http://schema.org/about",
+      "count": 25
+    }
+  ]
+}
+~~~
 
 Mappings (option `--mappings`) are stored in field `mappings` as array of [JSKOS Concept Mappings](https://gbv.github.io/jskos/jskos.html#concept-mappings):
 
@@ -363,7 +378,7 @@ The mapping type is given in field `type` with the Wikidata property URI as last
 
 ## NDJSON format
 
-Option `--format ndjson` serializes JSON field `concepts` with one record per line.
+Option `--format ndjson` serializes JSON field `concepts` with one record per line. The order if records is same as in tree, json, and csv format but each concept is only included once.
 
 ### CSV format
 
