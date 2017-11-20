@@ -35,7 +35,7 @@ $ wdtaxonomy
     -C, --color                          enforce color output
     -d, --descr                          include item descriptions
     -e, --sparql-endpoint <url>          customize the SPARQL endpoint
-    -f, --format <tree|csv|json|ndjson>  output format
+    -f, --format <text|csv|json|ndjson>  output format
     -i, --instances                      include instances
     -I, --no-instancecount               omit counting instances
     -j, --json                           use JSON output format
@@ -227,9 +227,9 @@ Show verbose error messages
 
 ## Output formats
 
-### Tree format
+### Text format
 
-By default, the taxonomy is printed in "`tree`" format with colored Unicode characters:
+By default, the taxonomy is printed in "`text`" format with colored Unicode characters:
 
 ```sh
 $ wdtaxonomy Q17362350
@@ -378,7 +378,7 @@ The mapping type is given in field `type` with the Wikidata property URI as last
 
 ## NDJSON format
 
-Option `--format ndjson` serializes JSON field `concepts` with one record per line. The order if records is same as in tree, json, and csv format but each concept is only included once.
+Option `--format ndjson` serializes JSON field `concepts` with one record per line. The order if records is same as in text, json, and csv format but each concept is only included once.
 
 ### CSV format
 

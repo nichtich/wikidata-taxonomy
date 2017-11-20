@@ -22,7 +22,7 @@ program
   .option('-C, --color', 'enforce color output')
   .option('-d, --descr', 'include item descriptions')
   .option('-e, --sparql-endpoint <url>', 'customize the SPARQL endpoint') // same in wikidata-cli
-  .option('-f, --format <tree|csv|json|ndjson>', 'output format')
+  .option('-f, --format <text|csv|json|ndjson>', 'output format')
   .option('-i, --instances', 'include instances')
   .option('-I, --no-instancecount', 'omit counting instances')
   .option('-j, --json', 'use JSON output format') // same as wikidata-cli
@@ -113,7 +113,7 @@ program
     } else {
       queryTaxonomy(id, env)
         .then(taxonomy => {
-          const serialize = serializeTaxonomy[format] || serializeTaxonomy.tree
+          const serialize = serializeTaxonomy[format] || serializeTaxonomy.text
           serialize(taxonomy, out(env.output), serializeOptions)
         })
         .catch(e => {

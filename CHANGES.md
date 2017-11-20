@@ -2,6 +2,8 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+* Rename default `tree` format to `text`.
+
 # 0.6.0
 
 * Express number of instances and sites as JSKOS Concept Occurrences.
