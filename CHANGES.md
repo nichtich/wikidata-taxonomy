@@ -2,9 +2,12 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# 0.6.1
+
+* Fix field `concepts` in json output (from object to array)
 * Rename default `tree` format to `text`.
 
-# 0.6.0
+# 0.6.0 (2017-11-15)
 
 * Express number of instances and sites as JSKOS Concept Occurrences.
 * Include instances in CSV format

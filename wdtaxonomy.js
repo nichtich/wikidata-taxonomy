@@ -43,6 +43,8 @@ program
   .option('-w, --password <string>', 'password to the SPARQL endpoint')
   .description('extract taxonomies from Wikidata')
   .action(function (wid, env) {
+    if (env.json) env.format = 'json'
+
     if (env.output === '-') {
       env.output = undefined
     }
@@ -65,8 +67,6 @@ program
 
     var out = process.stdout
 
-    if (env.json) env.format = 'json'
-
     if (env.output) {
       var ext = env.output.split('.').pop()
       if (!env.format && ['csv', 'json', 'ndjson'].indexOf(ext) >= 0) {
@@ -82,10 +82,10 @@ program
     }
 
     env.description = env.descr
-    const format = env.format || 'tree'
 
-    if (!format.match(/^(tree|csv|json|ndjson)$/)) {
-      error(1, 'unsupported format: %s', format)
+    const serialize = serializeTaxonomy[env.format || 'text']
+    if (!serialize) {
+      error(1, 'unsupported format: %s', env.format)
     }
 
     env.property = env.property || ''
@@ -113,7 +113,6 @@ program
     } else {
       queryTaxonomy(id, env)
         .then(taxonomy => {
-          const serialize = serializeTaxonomy[format] || serializeTaxonomy.text
           serialize(taxonomy, out(env.output), serializeOptions)
         })
         .catch(e => {
