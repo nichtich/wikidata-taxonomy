@@ -465,7 +465,7 @@ Release notes are listed in file [CHANGES.md](https://github.com/nichtich/wikida
 * [taxonomy browser](http://sergestratan.bitbucket.org/) is a web application
   based on Wikidata dumps
 * [Wikidata Graph Builder](https://angryloki.github.io/wikidata-graph-builder/) another web application
-
+* [wdmapper](https://wdmapper.readthedocs.io/) Wikidata authority file mapping tool
 
 [wikidata-cli]: https://npmjs.com/package/wikidata-cli
 
