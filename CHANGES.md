@@ -2,10 +2,11 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
-# 0.6.1
+# 0.6.1 (2017-11-28)
 
 * Fix field `concepts` in json output (from object to array)
-* Rename default `tree` format to `text`.
+* Rename default `tree` format to `txt`.
+* Add experimental `wdmappings` tool (not documented yet)
 
 # 0.6.0 (2017-11-15)
 
