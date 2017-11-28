@@ -2,6 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# 0.6.2 (2017-11-28)
+
+* Fix duplicated items and mappings (#36)
+
 # 0.6.1 (2017-11-28)
 
 * Fix field `concepts` in json output (from object to array)
