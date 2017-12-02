@@ -45,6 +45,7 @@ $ wdtaxonomy
     -n, --no-colors                      disable color output
     -o, --output <file>                  write result to a file
     -P, --property <id>                  hierarchy property (e.g. P279)
+    -R, --prune <criteria>               prune hierarchies (e.g. mappings)
     -p, --post                           use HTTP POST to disable caching
     -r, --reverse                        get superclasses instead
     -s, --sparql                         print SPARQL query and exit
@@ -216,6 +217,18 @@ disable color output
 #### output (`-o`)
 
 write result to a file given by name
+
+#### prune (`-R`)
+
+prune hierarchy to all entries with any of a given criteria plus their broader
+concepts and all top concepts:
+
+* `mappings`:  has mappings
+* `sites`: has sites
+* `instances`: has instances
+* `occurences` : has sites or instances
+
+Multiple criteria can be combined as alternatives with comma.
 
 #### uris (`-U`)
 

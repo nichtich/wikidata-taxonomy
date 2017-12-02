@@ -3,6 +3,7 @@
 const program = require('./lib/program')
 const { normalizeId } = require('wikidata-sdk')
 const { queryTaxonomy, serializeTaxonomy, sparqlQueries } = require('./index.js')
+const { pruneHierarchy } = require('./lib/jskos')
 
 program
   .version(require('./package.json').version)
@@ -10,20 +11,16 @@ program
   .option('-b, --brief', 'omit counting instances and sites')
   .option('-c, --children', 'get direct subclasses only')
   .option('-d, --descr', 'include item descriptions')
-  .option('-e, --sparql-endpoint <url>', 'customize the SPARQL endpoint') // same in wikidata-cli
+  .option('-R, --prune <criteria>', 'prune hierarchy (e.g. mappings)')
   .option('-i, --instances', 'include instances')
   .option('-I, --no-instancecount', 'omit counting instances')
-  .option('-l, --lang <lang>', 'specify the language to use') // same as wikidata-cli
   .option('-L, --no-labels', 'omit all labels')
   .option('-m, --mappings <ids>', 'mapping properties (e.g. P1709)')
   .option('-P, --property <id>', 'hierarchy property (e.g. P279)')
-  .option('-p, --post', 'use HTTP POST to disable caching')
   .option('-r, --reverse', 'get superclasses instead')
   .option('-S, --no-sitecount', 'omit counting sites')
   .option('-t, --total', 'count total number of instances')
-  .option('-u, --user <name>', 'user to the SPARQL endpoint')
   .option('-U, --uris', 'show full URIs in output formats')
-  .option('-w, --password <string>', 'password to the SPARQL endpoint')
   .description('extract taxonomies from Wikidata')
 
 program.run({
@@ -68,6 +65,9 @@ program.run({
     } else {
       queryTaxonomy(id, env)
         .then(taxonomy => {
+          if (env.prune) {
+            pruneHierarchy(taxonomy, env.prune)
+          }
           env.serialize(taxonomy, env.out(), serializeOptions)
         })
         .catch(e => {
