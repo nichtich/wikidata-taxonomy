@@ -35,7 +35,7 @@ $ wdtaxonomy
     -C, --color                          enforce color output
     -d, --descr                          include item descriptions
     -e, --sparql-endpoint <url>          customize the SPARQL endpoint
-    -f, --format <text|csv|json|ndjson>  output format
+    -f, --format <txt|csv|json|ndjson>   output format
     -i, --instances                      include instances
     -I, --no-instancecount               omit counting instances
     -j, --json                           use JSON output format
@@ -340,7 +340,7 @@ Field `concepts` contains an array of all extracted Wikidata entities (usually c
 
 Instances (option `--instances`) are linked via field `subjectOf` the same way as field `broader` and `narrower`. 
 
-The number of instances and sites, if counted is given as array of [JSKOS Concept Occurrences]((https://gbv.github.io/jskos/jskos.html#concept-occurrences) in field `occurrences`, each identified by subfield `relation`:
+The number of instances and sites, if counted is given as array of [JSKOS Concept Occurrences](https://gbv.github.io/jskos/jskos.html#concept-occurrences) in field `occurrences`, each identified by subfield `relation`:
 
 ~~~json
 
@@ -391,7 +391,7 @@ The mapping type is given in field `type` with the Wikidata property URI as last
 
 ## NDJSON format
 
-Option `--format ndjson` serializes JSON field `concepts` with one record per line. The order if records is same as in text, json, and csv format but each concept is only included once.
+Option `--format ndjson` serializes JSON field `concepts` with one record per line. The order if records is same as in txt, json, and csv format but each concept is only included once.
 
 ### CSV format
 
@@ -444,7 +444,7 @@ const { queryTaxonomy, serializeTaxonomy } = require('wikidata-taxonomy')
 
 // serialize taxonomy to stream
 serializeTaxonomy.csv(taxonomy, process.stdout)
-serializeTaxonomy.text(taxonomy, process.stdout, {colors: true})
+serializeTaxonomy.txt(taxonomy, process.stdout, {colors: true})
 serializeTaxonomy.json(taxonomy, process.stdout)
 serializeTaxonomy.ndjson(taxonomy, process.stdout)
 ~~~
@@ -453,7 +453,7 @@ serializeTaxonomy.ndjson(taxonomy, process.stdout)
 
 Requires wikidata-sdk and jQuery (but no other dependencies).
 
-See directory `example` for a demo.
+See directory `example` for a demo that *may* actually work.
 
 ## Release notes
 
@@ -479,6 +479,7 @@ Release notes are listed in file [CHANGES.md](https://github.com/nichtich/wikida
   based on Wikidata dumps
 * [Wikidata Graph Builder](https://angryloki.github.io/wikidata-graph-builder/) another web application
 * [wdmapper](https://wdmapper.readthedocs.io/) Wikidata authority file mapping tool
+* [Wikidata ontology explorer](https://lucaswerkmeister.github.io/wikidata-ontology-explorer/)
 
 [wikidata-cli]: https://npmjs.com/package/wikidata-cli
 
