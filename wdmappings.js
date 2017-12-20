@@ -7,6 +7,8 @@ const { simplifySparqlResults } = require('wikidata-sdk')
 const { itemFromRow, addMapping } = require('./lib/transform')
 const { getPrefLabel } = require('./lib/jskos')
 const serializeJson = require('./lib/serialize-json')
+const { mappingChars } = require('./lib/mappings')
+const beacon = require('beacon-links')
 
 /**
  * Usage examples:
@@ -63,27 +65,34 @@ const serializeMappings = {
   // BEACON link dump format
   txt: (graph, stream, options) => {
     const lang = options.language
-    const col = options.chalk
+    const meta = {}
 
-    const line = s => stream.write(s + '\n')
-    const metaline = (k, v) => line(col.dim('#') + k + col.dim(': ') + v)
-
-    metaline(col.dim('FORMAT'), col.dim('BEACON'))
     if (!options.uris) {
-      metaline('PREFIX', col.green('http://www.wikidata.org/entity/'))
-      metaline('TARGET', col.yellow(options.namespace))
+      meta.PREFIX = 'http://www.wikidata.org/entity/'
+      meta.TARGET = options.namespace
     }
 
     var triples = false
     if (options.mappings.length === 1) {
-      const url = 'http://www.wikidata.org/entity/' + options.mappings[0]
-      metaline('RELATION', col.cyan(url))
+      meta.RELATION = 'http://www.wikidata.org/entity/' + options.mappings[0]
     } else {
-      const relation = options.uris ? '{+ID}' : 'http://www.w3.org/2004/02/skos/core#{+ID}'
-      metaline('RELATION', col.cyan(relation))
+      meta.RELATION = options.uris ? '{+ID}' : 'http://www.w3.org/2004/02/skos/core#{+ID}'
       triples = true
     }
-    line('')
+
+    const serializer = beacon.Serializer({
+      highlight: {
+        field: options.chalk.bold,
+        delimiter: options.chalk.dim,
+        source: options.chalk.green,
+        annotation: options.chalk[triples ? 'cyan' : 'white'],
+        target: options.chalk.yellow
+      }
+    })
+
+    for (let line of serializer.metaLines(beacon.MetaFields(meta))) {
+      stream.write(line)
+    }
 
     for (let uri in graph.concepts) {
       const concept = graph.concepts[uri]
@@ -91,20 +100,50 @@ const serializeMappings = {
       const label = getPrefLabel(concept, lang, '')
 
       concept.mappings.forEach(mapping => {
+        let target = mapping.to.memberSet[0].uri
+        let annotation = label
+
+        if (!options.uris) {
+          target = target.substr(options.namespace.length)
+        }
+
+        if (triples) {
+          annotation = options.uris ? mapping.type[0] : mapping.type[0].split('#')[1]
+        }
+
+        stream.write(serializer.linkLine(id, annotation, target))
+      })
+    }
+  },
+  csv: (graph, stream, options) => {
+    const col = options.chalk
+
+    var fields = ['id', 'label', 'to']
+    stream.write(fields.join(col.dim(',')) + '\n')
+
+    for (let uri in graph.concepts) {
+      const concept = graph.concepts[uri]
+      const id = options.uris ? concept.uri : concept.notation[0]
+      const label = getPrefLabel(concept, options.language).replace(',', '')
+
+      concept.mappings.forEach(mapping => {
+        const types = mapping.type
+
+        var fields = [col.green(id), col.white(label)] // TODO: description
         var to = mapping.to.memberSet[0].uri
         if (!options.uris) {
           to = to.substr(options.namespace.length)
         }
-        var annotation = col.white(label)
-        if (triples) {
-          annotation = options.uris ? mapping.type[0] : mapping.type[0].split('#')[1]
-          annotation = col.cyan(annotation)
-        }
-        line([col.green(id), annotation, col.yellow(to)].join(col.dim('|')))
+        fields.push(col.cyan(options.uris ? types[0] : mappingChars[types[0]]))
+        fields.push(col.yellow(to))
+
+        let entity = types[types.length - 1]
+        fields.push(options.uris ? entity : entity.split(/\//)[4])
+
+        stream.write(fields.join(col.dim(',')) + '\n')
       })
     }
   }
-  // TODO: csv
 }
 
 program
@@ -114,10 +153,10 @@ program
   .option('-L, --no-labels', 'omit all labels')
   .option('-m, --mappings <ids>', 'mapping properties (e.g. P1709)')
   .option('-s, --sparql', 'print SPARQL query and exit')
-  .option('-U, --uris', 'show full URIs in output formats')
+  .description('extract ontology mappings from Wikidata')
 
 program.run({
-  formats: ['txt', 'json', 'ndjson'],
+  formats: ['txt', 'json', 'ndjson', 'csv'],
   serializer: serializeMappings,
   action: function (baseurl, env) {
     env.mappings = env.mappings || 'all'
