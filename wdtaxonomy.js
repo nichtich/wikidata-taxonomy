@@ -20,7 +20,6 @@ program
   .option('-r, --reverse', 'get superclasses instead')
   .option('-S, --no-sitecount', 'omit counting sites')
   .option('-t, --total', 'count total number of instances')
-  .option('-U, --uris', 'show full URIs in output formats')
   .description('extract taxonomies from Wikidata')
 
 program.run({
