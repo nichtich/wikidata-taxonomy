@@ -29,33 +29,33 @@ $ wdtaxonomy
 
   Options:
 
-    -V, --version                        output the version number
-    -b, --brief                          omit counting instances and sites
-    -c, --children                       get direct subclasses only
-    -C, --color                          enforce color output
-    -d, --descr                          include item descriptions
-    -e, --sparql-endpoint <url>          customize the SPARQL endpoint
-    -f, --format <txt|csv|json|ndjson>   output format
-    -i, --instances                      include instances
-    -I, --no-instancecount               omit counting instances
-    -j, --json                           use JSON output format
-    -l, --lang <lang>                    specify the language to use
-    -L, --no-labels                      omit all labels
-    -m, --mappings <ids>                 mapping properties (e.g. P1709)
-    -n, --no-colors                      disable color output
-    -o, --output <file>                  write result to a file
-    -P, --property <id>                  hierarchy property (e.g. P279)
-    -R, --prune <criteria>               prune hierarchies (e.g. mappings)
-    -p, --post                           use HTTP POST to disable caching
-    -r, --reverse                        get superclasses instead
-    -s, --sparql                         print SPARQL query and exit
-    -S, --no-sitecount                   omit counting sites
-    -t, --total                          count total number of instances
-    -u, --user <name>                    user to the SPARQL endpoint
-    -U, --uris                           show full URIs in output formats
-    -v, --verbose                        make the output more verbose
-    -w, --password <string>              password to the SPARQL endpoint
-    -h, --help                           output usage information
+    -V, --version                           output the version number
+    -b, --brief                             omit counting instances and sites
+    -c, --children                          get direct subclasses only
+    -C, --color                             enforce color output
+    -d, --descr                             include item descriptions
+    -e, --sparql-endpoint <url>             customize the SPARQL endpoint
+    -f, --format <txt|csv|tsv|json|ndjson>  output format
+    -i, --instances                         include instances
+    -I, --no-instancecount                  omit counting instances
+    -j, --json                              use JSON output format
+    -l, --lang <lang>                       specify the language to use
+    -L, --no-labels                         omit all labels
+    -m, --mappings <ids>                    mapping properties (e.g. P1709)
+    -n, --no-colors                         disable color output
+    -o, --output <file>                     write result to a file
+    -P, --property <id>                     hierarchy property (e.g. P279)
+    -R, --prune <criteria>                  prune hierarchies (e.g. mappings)
+    -p, --post                              use HTTP POST to disable caching
+    -r, --reverse                           get superclasses instead
+    -s, --sparql                            print SPARQL query and exit
+    -S, --no-sitecount                      omit counting sites
+    -t, --total                             count total number of instances
+    -u, --user <name>                       user to the SPARQL endpoint
+    -U, --uris                              show full URIs in output formats
+    -v, --verbose                           make the output more verbose
+    -w, --password <string>                 password to the SPARQL endpoint
+    -h, --help                              output usage information
 ```
 
 The first arguments needs to be a Wikidata identifier to be used as root of the taxonomy. For instance extract a taxonomy of planets ([Q634]):
@@ -393,9 +393,9 @@ The mapping type is given in field `type` with the Wikidata property URI as last
 
 Option `--format ndjson` serializes JSON field `concepts` with one record per line. The order if records is same as in txt, json, and csv format but each concept is only included once.
 
-### CSV format
+### CSV and TSV format
 
-The CSV format ("`--format csv`") is optimized for comparing differences in
+CSV and TSV format are optimized for comparing differences in
 time.  Each output row consists of five fields:
 
 * **level** in the hierarchy indicated by zero or more "`-`" (default) or "`=`"
@@ -404,7 +404,7 @@ time.  Each output row consists of five fields:
 * **id** of the item. Items on the same level are sorted by their id.
 
 * **label** of the item. Language can be selected with option `--language`.
-  The character `,` in labels is replaces by a whitespace.
+  The label in csv format is quoted.
 
 * **sites**: number of connected sites (Wikipedia and related project editions).
   Larger numbers may indicate more established concepts.
@@ -418,13 +418,13 @@ $ wdtaxonomy -f csv Q634
 ```
 ```csv
 level,id,label,sites,instances,parents
-,Q634,planet,196,7,^
--,Q44559,extrasolar planet,81,833,^
---,Q205901,circumbinary planet,14,10,
---,Q327757,super-Earth,32,46,
+,Q634,"planet",196,7,^
+-,Q44559,"extrasolar planet",81,833,^
+--,Q205901,"circumbinary planet",14,10,
+--,Q327757,"super-Earth",32,46,
 ...
--,Q128207,terrestrial planet,67,7,
-==,Q327757,super-Earth,32,46,
+-,Q128207,"terrestrial planet",67,7,
+==,Q327757,"super-Earth",32,46,
 ...
 
 ```

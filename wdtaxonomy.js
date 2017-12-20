@@ -23,7 +23,7 @@ program
   .description('extract taxonomies from Wikidata')
 
 program.run({
-  formats: ['txt', 'csv', 'json', 'ndjson'],
+  formats: ['txt', 'csv', 'tsv', 'json', 'ndjson'],
   serializer: serializeTaxonomy,
   action: function (wid, env, error) {
     wid = wid.replace(/^.*[^0-9A-Z]([QP][0-9]+)([^0-9].*)?$/i, '$1')
