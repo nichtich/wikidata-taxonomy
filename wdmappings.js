@@ -80,7 +80,7 @@ const serializeMappings = {
       triples = true
     }
 
-    const serializer = beacon.Serializer({
+    const writer = beacon.Writer(stream, {
       highlight: {
         field: options.chalk.bold,
         delimiter: options.chalk.dim,
@@ -90,9 +90,7 @@ const serializeMappings = {
       }
     })
 
-    for (let line of serializer.metaLines(beacon.MetaFields(meta))) {
-      stream.write(line)
-    }
+    writer.writeMeta(beacon.MetaFields(meta))
 
     for (let uri in graph.concepts) {
       const concept = graph.concepts[uri]
@@ -111,7 +109,7 @@ const serializeMappings = {
           annotation = options.uris ? mapping.type[0] : mapping.type[0].split('#')[1]
         }
 
-        stream.write(serializer.linkLine(id, annotation, target))
+        writer.writeTokens(id, annotation, target)
       })
     }
   },
