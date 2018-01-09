@@ -1,5 +1,18 @@
 language: node_js
 node_js:
-    - 6
-    - 7
-    - 8
+- 6
+- 7
+- 8
+after_script:
+- npm install coveralls && cat ./coverage/lcov.info | coveralls
+
+deploy:
+  on:
+    tags: true
+    branch: master
+    skip_cleanup: true
+    node: 6
+  provider: npm
+  email: jakob.voss@gbv.de
+  api_key:
+    secure: iPV4bVQOyoH2wajMeRsYaO1h8ysigi4R8j1wrE7RUOJgiOmFY4xBqsw4PEwYlIR/k7bDjroh9FjPOhwFDho1zuYtnwRieTeYctviEkfKosa8WPGYE05+83ty9aFaaVf7xrmW6in1UIlesQdudigvHQyVJZ17CR1Z99mputW7I0g=

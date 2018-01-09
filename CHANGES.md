@@ -2,6 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# 0.6.5 (2017-01-09)
+
+* Update dependencies
+
 # 0.6.3 (2017-12-20)
 
 * Quote label in CSV and add TSV format (#38)
