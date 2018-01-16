@@ -46,26 +46,20 @@ function sparqlQuery (baseurl, env) {
   return query
 }
 
-function traverseMappings (graph, callback) {
-  for (let uri in graph.concepts) {
-    let concept = graph.concepts[uri]
-    concept.mappings.forEach(mapping => {
-      callback(mapping, concept)
-    })
-  }
-}
-
 const serializeMappings = {
   json: serializeJson,
-  ndjson: (graph, stream) => {
-    traverseMappings(graph, mapping => {
+  ndjson: (concordance, stream) => {
+    concordance.mappings.forEach(mapping => {
       stream.write(JSON.stringify(mapping) + '\n')
     })
   },
   // BEACON link dump format
-  txt: (graph, stream, options) => {
+  txt: (concordance, stream, options) => {
     const lang = options.language
-    const meta = {}
+    const meta = {
+      NAME: concordance.prefLabel.en,
+      DESCRIPTION: concordance.scopeNote.en[0]
+    }
 
     if (!options.uris) {
       meta.PREFIX = 'http://www.wikidata.org/entity/'
@@ -80,6 +74,9 @@ const serializeMappings = {
       triples = true
     }
 
+    meta.SOURCESET = concordance.fromScheme.uri
+    meta.TIMESTAMP = concordance.modified
+
     const writer = beacon.Writer(stream, {
       highlight: {
         field: options.chalk.bold,
@@ -92,13 +89,13 @@ const serializeMappings = {
 
     writer.writeMeta(beacon.MetaFields(meta))
 
-    for (let uri in graph.concepts) {
-      const concept = graph.concepts[uri]
+    concordance.mappings.forEach(mapping => {
+      const concept = mapping.from.memberSet[0]
       const id = options.uris ? concept.uri : concept.notation[0]
       const label = getPrefLabel(concept, lang, '')
 
-      concept.mappings.forEach(mapping => {
-        let target = mapping.to.memberSet[0].uri
+      mapping.to.memberSet.forEach(targetConcept => {
+        let target = targetConcept.uri
         let annotation = label
 
         if (!options.uris) {
@@ -111,22 +108,22 @@ const serializeMappings = {
 
         writer.writeTokens(id, annotation, target)
       })
-    }
+    })
   },
-  csv: (graph, stream, options) => {
+  // CSV format
+  csv: (concordance, stream, options) => {
     const col = options.chalk
 
-    var fields = ['id', 'label', 'to']
+    var fields = ['source', 'label', 'type', 'target', 'property']
     stream.write(fields.join(col.dim(',')) + '\n')
 
-    for (let uri in graph.concepts) {
-      const concept = graph.concepts[uri]
+    concordance.mappings.forEach(mapping => {
+      const concept = mapping.from.memberSet[0]
       const id = options.uris ? concept.uri : concept.notation[0]
       const label = getPrefLabel(concept, options.language).replace(',', '')
+      const types = mapping.type
 
-      concept.mappings.forEach(mapping => {
-        const types = mapping.type
-
+      mapping.to.memberSet.forEach(targetConcept => {
         var fields = [col.green(id), col.white(label)] // TODO: description
         var to = mapping.to.memberSet[0].uri
         if (!options.uris) {
@@ -140,7 +137,7 @@ const serializeMappings = {
 
         stream.write(fields.join(col.dim(',')) + '\n')
       })
-    }
+    })
   }
 }
 
@@ -170,6 +167,10 @@ program.run({
       mappings: env.mappings
     }
 
+    var concordance = {
+      mappings: []
+    }
+
     let query = sparqlQuery(baseurl, env)
     if (env.sparql) {
       env.out().write(query + '\n')
@@ -189,7 +190,32 @@ program.run({
             addMapping(concepts[uri], row.mapping, row.mappingProperty)
           })
 
-          env.serialize({ concepts: concepts }, env.out(), serializeOptions)
+          for (let uri in concepts) {
+            let concept = concepts[uri]
+            concept.mappings.forEach(mapping => {
+              ['notation', 'prefLabel', 'scopeNote'].forEach(key => {
+                if (key in concept) {
+                  mapping.from.memberSet[0][key] = concept[key]
+                }
+              })
+              concordance.mappings.push(mapping)
+            })
+          }
+
+          concordance.fromScheme = {
+            uri: 'http://www.wikidata.org/entity/Q2013',
+            prefLabel: { en: 'Wikidata' },
+            url: 'https://www.wikidata.org/'
+          }
+          concordance.prefLabel = {
+            en: 'Wikidata ontology mappings'
+          }
+          concordance.scopeNote = {
+            en: ['Mapping from Wikidata entities to external ontologies']
+          }
+          concordance.modified = (new Date()).toISOString()
+
+          env.serialize(concordance, env.out(), serializeOptions)
         }
       ).catch(e => {
         console.error(env.verbose && e.stack ? e.stack : 'SPARQL request failed')
