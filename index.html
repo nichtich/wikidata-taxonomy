@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <title>wikidata-taxonomy browser</title>
+
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap@next/dist/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+
+    <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+    <script src="https://unpkg.com/wikidata-sdk/dist/wikidata-sdk.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      // must be called before wikidata-taxonomy!
+			// use axios instead of request-promise-native
+			window.requestPromise = function (options) {
+				options.url = options.uri
+				options.params = options.qs
+				if (options.auth) options.auth.username = options.auth.user
+        return axios(options).then(r => r.data)
+			}
+    </script>
+    <script src="dist/wikidata-taxonomy.min.js"></script>
+    <script src="dist/bundle.js"></script>
+  </body>
+</html>
