@@ -444,7 +444,7 @@ const { queryTaxonomy, serializeTaxonomy } = require('wikidata-taxonomy')
 
 // serialize taxonomy to stream
 serializeTaxonomy.csv(taxonomy, process.stdout)
-serializeTaxonomy.txt(taxonomy, process.stdout, {colors: true})
+serializeTaxonomy.txt(taxonomy, process.stdout, {colors: true}) // FIXME
 serializeTaxonomy.json(taxonomy, process.stdout)
 serializeTaxonomy.ndjson(taxonomy, process.stdout)
 ~~~

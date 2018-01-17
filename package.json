@@ -15,10 +15,12 @@
     "url": "git+https://github.com/nichtich/wikidata-taxonomy.git"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/standard *.js lib/*.js",
-    "fix": "./node_modules/.bin/standard --fix *.js lib/*.js",
-    "build": "./node_modules/.bin/browserify . -i wikidata-sdk -i chalk -i request-promise -s wdt -o dist/wikidata-taxonomy.js",
-    "test": "./node_modules/.bin/mocha --reporter spec --no-colors"
+    "lint": "npx standard *.js lib/*.js",
+    "fix": "npx standard --fix *.js lib/*.js",
+    "build": "npx browserify . --no-bundle-external -s wdt -o dist/wikidata-taxonomy.js -t [ babelify --presets [ es2015 ] ]",
+    "minify": "npx uglifyjs dist/wikidata-taxonomy.js -c -m --source-map --output dist/wikidata-taxonomy.min.js.map -o dist/wikidata-taxonomy.min.js",
+    "dist": "npm run build && npm run minify",    
+    "test": "npx mocha --reporter spec --no-colors"
   },
   "bugs": {
     "url": "https://github.com/nichtich/wikidata-taxonomy/issues"
@@ -46,6 +48,9 @@
     "chai": "^3.5.0",
     "mocha": "^3.0.0",
     "browserify": "^14.4.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babelify": "^7.3.0",
+    "uglify-es": "^3.3.7",
     "standard": "^10.0"
   },
   "conf.py": {
