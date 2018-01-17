@@ -1,3 +1,5 @@
+.PHONY: docs style dist test
+
 docs: *.md
 	rm -rf docs
 	sphinx-build -a . docs

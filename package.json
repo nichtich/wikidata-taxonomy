@@ -17,9 +17,9 @@
   "scripts": {
     "lint": "npx standard *.js lib/*.js",
     "fix": "npx standard --fix *.js lib/*.js",
-    "build": "npx browserify . --no-bundle-external -s wdt -o dist/wikidata-taxonomy.js -t [ babelify --presets [ es2015 ] ]",
+    "build": "npx browserify . -s wdt --no-bundle-external -o dist/wikidata-taxonomy.js",
     "minify": "npx uglifyjs dist/wikidata-taxonomy.js -c -m --source-map --output dist/wikidata-taxonomy.min.js.map -o dist/wikidata-taxonomy.min.js",
-    "dist": "npm run build && npm run minify",    
+    "dist": "npm run build && npm run minify",
     "test": "npx mocha --reporter spec --no-colors"
   },
   "bugs": {
@@ -44,14 +44,34 @@
   "engines": {
     "node": ">= 4.0.0"
   },
+  "browserify": {
+    "transform": [
+      [
+        "browserify-shim"
+      ],
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
+    ]
+  },
+  "browserify-shim": {
+    "wikidata-sdk": "global:wdk",
+    "request-promise-native": "global:requestPromise"
+  },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^3.0.0",
-    "browserify": "^14.4.0",
     "babel-preset-es2015": "^6.24.0",
     "babelify": "^7.3.0",
-    "uglify-es": "^3.3.7",
-    "standard": "^10.0"
+    "browserify": "^14.4.0",
+    "browserify-shim": "^3.8.14",
+    "chai": "^3.5.0",
+    "mocha": "^3.0.0",
+    "standard": "^10.0",
+    "uglify-es": "^3.3.7"
   },
   "conf.py": {
     "project": "wdtaxonomy",

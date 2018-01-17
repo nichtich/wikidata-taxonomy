@@ -451,9 +451,7 @@ serializeTaxonomy.ndjson(taxonomy, process.stdout)
 
 ## Usage in web applications
 
-Requires wikidata-sdk and jQuery (but no other dependencies).
-
-See directory `example` for a demo that *may* actually work.
+Experimental support of this library in web application is given with file `wikidata-taxonomy.js` in directoy `dist`. The `gh-pages` branch contains a sample application, also available at <http://jakobvoss.de/wikidata-taxonomy/>.
 
 ## Release notes
 
