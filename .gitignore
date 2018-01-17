@@ -39,3 +39,6 @@ jspm_packages
 
 # mkdocs output directory
 docs/
+
+# gh-pages branch checked out in subfolder
+gh-pages/
