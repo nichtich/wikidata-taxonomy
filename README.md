@@ -453,7 +453,7 @@ The library provides:
   as [JSKOS Concept Scheme](https://gbv.github.io/jskos/jskos.html#concept-schemes). See
   [JSON format](#json-format) of the command line client for documentation.
 
-    ~~~json
+    ~~~javascript
     const { queryTaxonomy } = require('wikidata-taxonomy')
 
     var options = { lang: 'fr', brief: true }
@@ -480,7 +480,7 @@ The library provides:
 * `serializeTaxonomy` contains serializers to be called with a taxonomy, an output stream,
   and optional configuration:
 
-    ~~~json
+    ~~~javascript
     const { serializeTaxonomy } = require('wikidata-taxonomy')
 
     // serialize taxonomy to stream
@@ -493,6 +493,21 @@ The library provides:
 ## Usage in web applications
 
 Experimental support of this library in web application is given with file `wikidata-taxonomy.js` in directoy `dist`. The `gh-pages` branch contains a sample application, also available at <http://jakobvoss.de/wikidata-taxonomy/>.
+
+Requires wikidata-sdk and a HTTP client library. The latter can be attached to `window.requestPromise` (before wikidata-taxonomy is loaded). Axios is detected by default.
+
+~~~html
+<html>
+  <head>
+    <script src="https://unpkg.com/wikidata-sdk/dist/wikidata-sdk.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/wikidata-taxonomy/dist/wikidata-taxonomy.min.js"></script>
+  </head>
+  <body>
+    ...
+  </body>
+</html>
+~~~
 
 ## Release notes
 

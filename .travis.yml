@@ -5,7 +5,6 @@ node_js:
 - 8
 after_script:
 - npm install coveralls && cat ./coverage/lcov.info | coveralls
-
 deploy:
   on:
     tags: true
@@ -15,4 +14,4 @@ deploy:
   provider: npm
   email: jakob.voss@gbv.de
   api_key:
-    secure: iPV4bVQOyoH2wajMeRsYaO1h8ysigi4R8j1wrE7RUOJgiOmFY4xBqsw4PEwYlIR/k7bDjroh9FjPOhwFDho1zuYtnwRieTeYctviEkfKosa8WPGYE05+83ty9aFaaVf7xrmW6in1UIlesQdudigvHQyVJZ17CR1Z99mputW7I0g=
+    secure: U/zvm9rucwwxzQzn0n6Vq0m7z+fq6zkrETYDAvFxKl3r8h11swvPJC4d3cPert+lprYpBmxQMVFmMms6nMxniSQNd/T1tM5jkH8sx5EWwe0v2YrwWW6SizOM8ek+enpc8cjosZisKBJcKeQdjPpQcjgw84b7krCT1E3PA+Gz2uLpZU6TY93P4ZmEiujzoVQU1I1egV6irWCeGXN/EScIUen0yz4AJ7GneY9pVGdvChDZ7dhIkhz/iJewDujn66WwTfGCB/C0VU585Kk+xS8LFsPhtiT6TJGQ01DI9k9TVGuwPf5/GSL5Vjq2CMPX6xC/XTnc1yWvrU0rBOdMtGq6fkQaZk1DHm+/ZoQUh3XpKz2KVJcOi77PgbEmn2TYrOmt+9p51clCQBRDt2KG5AQe462H4gtJdmywLh8jrfI5rl+eNKZnHIZ69yqJdWlrZ+pdVK1BjRbtBG5arTgP8kl3RW+XRAlv1sJBSx731C0My976OrXjNTjrt3ktO7uaVhGDUENQqtBz+RAYWMRF2Qny2P3RhEQyb88ljBY1DkPshi2ZFl+mAFE0OQx5h2e4IV09Kbr+eL8YAdYTrk+8RpIR+FE38MlnRdZbgXEAzycCJX3kQjXV5EcekTxCxVAAaD6pR7RLLv/yUauXHK0TZZr887a5AA3Ld91Rjnw3fHxtayM=

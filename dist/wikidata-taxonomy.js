@@ -454,6 +454,22 @@ function queryViaRequest(sparql, env) {
     if (env.password) options.auth.password = env.password;
   }
 
+  // use axios as fallback
+  if (!request) {
+    if (typeof axios === 'function') {
+      request = function request(options) {
+        options.url = options.uri;
+        options.params = options.qs;
+        if (options.auth) options.auth.username = options.auth.user;
+        return axios(options).then(function (r) {
+          return r.data;
+        }); // eslint-disable-line
+      };
+    } else {
+      return Promise.reject(new Error('No HTTP client library enabled!'));
+    }
+  }
+
   return request(options);
 }
 
