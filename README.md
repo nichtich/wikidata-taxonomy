@@ -1,6 +1,6 @@
 # Wikidata-Taxonomy
 
-Command-line tool to extract taxonomies from [Wikidata](https://wikidata.org).
+Command-line tool and library to extract taxonomies from [Wikidata](https://wikidata.org).
 
 ![](https://github.com/nichtich/wikidata-taxonomy/raw/master/img/wdtaxonomy-example.png)
 
@@ -13,6 +13,8 @@ Install globally to make command `wdtaxonomy` accessible from your shell `$PATH`
 ```sh
 $ npm install -g wikidata-taxonomy
 ```
+
+Installation and usage [as module](#usage-as-module) and [in web applications](#usage-in-web-applications) is described below.
 
 ## Usage
 
@@ -439,15 +441,54 @@ subclasses of "extrasolar planet". The latter also occurs as subclass of
 
 ## Usage as module
 
-~~~json
-const { queryTaxonomy, serializeTaxonomy } = require('wikidata-taxonomy')
+Add `wikidata-taxonomy` as dependency to you `package.json`:
 
-// serialize taxonomy to stream
-serializeTaxonomy.csv(taxonomy, process.stdout)
-serializeTaxonomy.txt(taxonomy, process.stdout, {colors: true}) // FIXME
-serializeTaxonomy.json(taxonomy, process.stdout)
-serializeTaxonomy.ndjson(taxonomy, process.stdout)
-~~~
+```sh
+$ npm install wikidata-taxonomy --save
+```
+
+The library provides:
+
+* `queryTaxonomy(id, options)` returns a promise with a taxonomy extracted from Wikidata
+  as [JSKOS Concept Scheme](https://gbv.github.io/jskos/jskos.html#concept-schemes). See
+  [JSON format](#json-format) of the command line client for documentation.
+
+    ~~~json
+    const { queryTaxonomy } = require('wikidata-taxonomy')
+
+    var options = { lang: 'fr', brief: true }
+    queryTaxonomy('Q634', lang)
+    .then(taxonomy => {
+      taxonomy.concepts.forEach(concept => {
+        var qid = concept.notation[0]
+        var label = (concept.prefLabel || {}).fr || '???'
+        console.log('%s %s', qid, label)
+      })
+    })
+    .catch(error => console.error("E",error))
+    ~~~
+
+    Options roughly equivalent command line [query options](#query-options):
+
+    * boolean flags `brief`, `children`, `description`, `labels`, `total`,
+      `instances`, `instancecount`, `sitecount`, `reverse`, `post`
+    * SPARQL endpoint configuration with `endpoint`, `user`, `password`
+    * language tag `language` or `lang`
+    * array `property` (set to `['P279', 'P31']` by default)
+    * array or string `mappings`
+
+* `serializeTaxonomy` contains serializers to be called with a taxonomy, an output stream,
+  and optional configuration:
+
+    ~~~json
+    const { serializeTaxonomy } = require('wikidata-taxonomy')
+
+    // serialize taxonomy to stream
+    serializeTaxonomy.csv(taxonomy, process.stdout)
+    serializeTaxonomy.txt(taxonomy, process.stdout, {colors: true}) // FIXME
+    serializeTaxonomy.json(taxonomy, process.stdout)
+    serializeTaxonomy.ndjson(taxonomy, process.stdout)
+    ~~~
 
 ## Usage in web applications
 

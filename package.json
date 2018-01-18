@@ -70,6 +70,7 @@
     "browserify-shim": "^3.8.14",
     "chai": "^3.5.0",
     "mocha": "^3.0.0",
+    "npx": "^9.7.1",
     "standard": "^10.0",
     "uglify-es": "^3.3.7"
   },
