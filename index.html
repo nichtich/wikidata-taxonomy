@@ -16,21 +16,11 @@
     <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
     <script src="https://unpkg.com/wikidata-sdk/dist/wikidata-sdk.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/wikidata-taxonomy/dist/wikidata-taxonomy.js"></script>
 
   </head>
   <body>
     <div id="app"></div>
-    <script>
-      // must be called before wikidata-taxonomy!
-			// use axios instead of request-promise-native
-			window.requestPromise = function (options) {
-				options.url = options.uri
-				options.params = options.qs
-				if (options.auth) options.auth.username = options.auth.user
-        return axios(options).then(r => r.data)
-			}
-    </script>
-    <script src="dist/wikidata-taxonomy.min.js"></script>
     <script src="dist/bundle.js"></script>
   </body>
 </html>

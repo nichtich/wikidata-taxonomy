@@ -21,13 +21,43 @@
         </b-collapse>
       </b-navbar>
 
-      <concept-scheme v-bind="taxonomy"></concept-scheme>
+      <b-container fluid v-if="taxonomy">
+        <b-row>
+          <b-col>
+            <serialized-taxonomy :taxonomy="taxonomy"></serialized-taxonomy>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <concept-scheme v-bind="taxonomy"></concept-scheme>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <h3>taxonomy in JSKOS</h3>
+            <tree-view :data="taxonomy"></tree-view>
+          </b-col>
+        </b-row>
+      </b-container>
+      <b-container fluid v-if="!taxonomy">
+        <b-row>
+          <b-col>
+            <div class="alert alert-primary" role="alert">
+              Wikidata entity with ID {{id}} not found (or there was an error)!
+            </div>
+          </b-col>
+        </b-row>
+      </b-container>
 
   </div>
 </template>
 
 <script>
 import ConceptScheme from './ConceptScheme.vue'
+import SerializedTaxonomy from './SerializedTaxonomy.vue'
+import TreeView from "vue-json-tree-view"
+
+Vue.use(TreeView)
 
 export default {
   created: function () { 
@@ -50,6 +80,7 @@ export default {
         vm.taxonomy = taxonomy
       })
       .catch(e => {
+        console.error(e)
         vm.taxonomy = undefined
       })
       .finally( (x) => {
@@ -59,7 +90,8 @@ export default {
     }
   },  
   components: {
-    'concept-scheme': ConceptScheme
+    'concept-scheme': ConceptScheme,
+    'serialized-taxonomy': SerializedTaxonomy
   }
 }
 </script>
