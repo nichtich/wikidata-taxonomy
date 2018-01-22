@@ -1,0 +1,70 @@
+@media (max-width: 767px) {
+  .container-fluid {
+    padding: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .navbar {
+    margin-bottom: 15px;
+  }
+}
+
+footer.navbar {
+  border-top: solid 1px #dee2e6;
+  padding-top: 0;
+  margin-top: 25px;
+}
+
+pre, dl {
+  padding: 2px;
+}
+
+
+ul.jskos-tree {
+  margin: 0px;
+  padding: 10px;
+}
+
+ul.jskos-tree ul {
+  padding-left: 30px;
+}
+
+ul.jskos-tree li {
+  position: relative;
+  list-style: none;
+}
+
+ul.jskos-tree li:before{
+  position: absolute;
+  left: -15px;
+  top: 0px;
+  content: '';
+  display: block;
+  border-left: 1px solid #ddd;
+  height: 1em;
+  border-bottom: 1px solid #ddd;
+  width: 10px;
+}
+
+ul.jskos-tree li:after{
+  position: absolute;
+  left: -15px;
+  bottom: -7px;
+  content: '';
+  display: block;
+  border-left: 1px solid #ddd;
+  height: 100%;
+}
+        
+ul.jskos-tree li.root{
+  margin: 0px 0px 0px -20px;
+}
+
+ul.jskos-tree-root>li:before{
+  display: none;
+}
+
+ul.jskos-tree li:last-child:after {
+  display: none
+}

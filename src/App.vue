@@ -1,19 +1,18 @@
 <template>
   <div>
-      <b-navbar toggleable="md" type="light" variant="light">
-        <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-        <b-navbar-brand href="#">WDT</b-navbar-brand>
+    <b-navbar toggleable="md" type="light" variant="light">
+      <b-navbar-nav>
+        <b-nav-form @submit.prevent="submit">
+          <b-form-input size="sm" class="mr-sm-2" type="text" name="id" v-model="id" placeholder="Root Item"/>
+        </b-nav-form>
+      </b-navbar-nav>
+
+      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
         <b-collapse is-nav id="nav_collapse">
 
-          <b-navbar-nav>
-            <b-nav-form @submit.prevent="submit">
-              <b-form-input size="sm" class="mr-sm-2" type="text" name="id" v-model="id" placeholder="Root Item"/>
-            </b-nav-form>
-          </b-navbar-nav>
-
           <b-navbar-nav class="ml-auto">
-            <b-nav-item-dropdown text="about" right>
-              <b-dropdown-item href="https://github.com/nichtich/wikidata-taxonomy">source code at GitHub</b-dropdown-item>
+            <b-nav-item-dropdown text="wikidata-taxonomy" right>
+              <b-dropdown-item href="https://github.com/nichtich/wikidata-taxonomy">source code</b-dropdown-item>
               <b-dropdown-item href="https://wdtaxonomy.readthedocs.io/en/latest/">documentation</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -24,22 +23,25 @@
       <b-container fluid v-if="taxonomy">
         <b-row>
           <b-col>
-            <serialized-taxonomy :taxonomy="taxonomy"></serialized-taxonomy>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <concept-scheme v-bind="taxonomy"></concept-scheme>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <h3>taxonomy in JSKOS</h3>
-            <tree-view :data="taxonomy"></tree-view>
+            <b-tabs>
+              <b-tab title="tree" href="#tree" active>
+                <jskos-tree v-bind="taxonomy"></jskos-tree>
+              </b-tab>
+              <b-tab title="text" href="#text">
+                <serialized-taxonomy :taxonomy="taxonomy"></serialized-taxonomy>
+              </b-tab>
+              <b-tab title="data" href="#data">
+                <tree-view :data="taxonomy"></tree-view>
+              </b-tab>
+              <b-tab title="about" href="#about">
+                <taxonomy-metadata v-bind="taxonomy"></taxonomy-metadata>
+              </b-tab>
+            </b-tabs>  
           </b-col>
         </b-row>
       </b-container>
-      <b-container fluid v-if="!taxonomy">
+
+      <b-container fluid v-else>
         <b-row>
           <b-col>
             <div class="alert alert-primary" role="alert">
@@ -53,13 +55,19 @@
 </template>
 
 <script>
-import ConceptScheme from './ConceptScheme.vue'
+import JskosTree from './JskosTree.vue'
+import TaxonomyMetadata from './TaxonomyMetadata.vue'
 import SerializedTaxonomy from './SerializedTaxonomy.vue'
 import TreeView from "vue-json-tree-view"
 
 Vue.use(TreeView)
 
 export default {
+  components: {
+    JskosTree,
+    TaxonomyMetadata,
+    SerializedTaxonomy
+  },
   created: function () { 
     this.id = this.$route.query.id
     this.query()
@@ -89,9 +97,5 @@ export default {
       })
     }
   },  
-  components: {
-    'concept-scheme': ConceptScheme,
-    'serialized-taxonomy': SerializedTaxonomy
-  }
 }
 </script>

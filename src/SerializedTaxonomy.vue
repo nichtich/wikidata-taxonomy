@@ -36,6 +36,12 @@ module.exports = {
         }
       }
       wdt.serializeTaxonomy.txt(this.taxonomy, stream, options)
+      // TODO: serializeTaxonomy should not modify concepts
+      if (this.taxonomy.concepts) {
+        this.taxonomy.concepts.forEach( concept => {
+          delete concept.visited
+        })
+      }
       return serialized
     }
   }
