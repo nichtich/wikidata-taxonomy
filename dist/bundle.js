@@ -238,6 +238,23 @@ module.exports = function normalizeComponent (
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -266,13 +283,14 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_3_vue_json_tree_view___default.a);
       const vm = this;
       console.log("$ wdtaxonomy " + id);
       if (id === undefined || id === '') return;
-
+      this.waiting = true;
       wdt.queryTaxonomy(id).then(function (taxonomy) {
         vm.taxonomy = taxonomy;
       }).catch(e => {
         console.error(e);
         vm.taxonomy = undefined;
       }).finally(x => {
+        this.waiting = false;
         vm.$forceUpdate();
         console.log(vm.taxonomy);
       });
@@ -519,7 +537,7 @@ new Vue({
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__ = __webpack_require__(1);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4ac03cb8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_14d16426_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__ = __webpack_require__(20);
 var normalizeComponent = __webpack_require__(0)
 /* script */
 
@@ -536,7 +554,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4ac03cb8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_14d16426_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -744,7 +762,7 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b-navbar',{attrs:{"toggleable":"md","type":"light","variant":"light"}},[_c('b-navbar-nav',[_c('b-nav-form',{on:{"submit":function($event){$event.preventDefault();_vm.submit($event)}}},[_c('b-form-input',{staticClass:"mr-sm-2",attrs:{"size":"sm","type":"text","name":"id","placeholder":"Root Item"},model:{value:(_vm.id),callback:function ($$v) {_vm.id=$$v},expression:"id"}})],1)],1),_vm._v(" "),_c('b-navbar-toggle',{attrs:{"target":"nav_collapse"}}),_vm._v(" "),_c('b-collapse',{attrs:{"is-nav":"","id":"nav_collapse"}},[_c('b-navbar-nav',{staticClass:"ml-auto"},[_c('b-nav-item-dropdown',{attrs:{"text":"wikidata-taxonomy","right":""}},[_c('b-dropdown-item',{attrs:{"href":"https://github.com/nichtich/wikidata-taxonomy"}},[_vm._v("source code")]),_vm._v(" "),_c('b-dropdown-item',{attrs:{"href":"https://wdtaxonomy.readthedocs.io/en/latest/"}},[_vm._v("documentation")])],1)],1)],1)],1),_vm._v(" "),(_vm.taxonomy)?_c('b-container',{attrs:{"fluid":""}},[_c('b-row',[_c('b-col',[_c('b-tabs',[_c('b-tab',{attrs:{"title":"tree","href":"#tree","active":""}},[_c('jskos-tree',_vm._b({},'jskos-tree',_vm.taxonomy,false))],1),_vm._v(" "),_c('b-tab',{attrs:{"title":"text","href":"#text"}},[_c('serialized-taxonomy',{attrs:{"taxonomy":_vm.taxonomy}})],1),_vm._v(" "),_c('b-tab',{attrs:{"title":"data","href":"#data"}},[_c('tree-view',{attrs:{"data":_vm.taxonomy}})],1),_vm._v(" "),_c('b-tab',{attrs:{"title":"about","href":"#about"}},[_c('taxonomy-metadata',_vm._b({},'taxonomy-metadata',_vm.taxonomy,false))],1)],1)],1)],1)],1):_c('b-container',{attrs:{"fluid":""}},[_c('b-row',[_c('b-col',[_c('div',{staticClass:"alert alert-primary",attrs:{"role":"alert"}},[_vm._v("\n            Wikidata entity with ID "+_vm._s(_vm.id)+" not found (or there was an error)!\n          ")])])],1)],1)],1)}
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b-navbar',{attrs:{"toggleable":"md","type":"light","variant":"light"}},[_c('b-navbar-nav',[_c('b-nav-form',{on:{"submit":function($event){$event.preventDefault();_vm.submit($event)}}},[_c('b-form-input',{staticClass:"mr-sm-2",attrs:{"size":"sm","type":"text","name":"id","placeholder":"Root Item"},model:{value:(_vm.id),callback:function ($$v) {_vm.id=$$v},expression:"id"}})],1)],1),_vm._v(" "),_c('b-navbar-toggle',{attrs:{"target":"nav_collapse"}}),_vm._v(" "),_c('b-collapse',{attrs:{"is-nav":"","id":"nav_collapse"}},[_c('b-navbar-nav',{staticClass:"ml-auto"},[_c('b-nav-item-dropdown',{attrs:{"text":"wikidata-taxonomy","right":""}},[_c('b-dropdown-item',{attrs:{"href":"https://github.com/nichtich/wikidata-taxonomy"}},[_vm._v("source code")]),_vm._v(" "),_c('b-dropdown-item',{attrs:{"href":"https://wdtaxonomy.readthedocs.io/en/latest/"}},[_vm._v("documentation")])],1)],1)],1)],1),_vm._v(" "),_c('b-container',{attrs:{"fluid":""}},[_c('b-row',[(_vm.taxonomy)?_c('b-col',[_c('b-tabs',[_c('b-tab',{attrs:{"title":"tree","href":"#tree","active":""}},[_c('jskos-tree',_vm._b({},'jskos-tree',_vm.taxonomy,false))],1),_vm._v(" "),_c('b-tab',{attrs:{"title":"text","href":"#text"}},[_c('serialized-taxonomy',{attrs:{"taxonomy":_vm.taxonomy}})],1),_vm._v(" "),_c('b-tab',{attrs:{"title":"data","href":"#data"}},[_c('tree-view',{attrs:{"data":_vm.taxonomy}})],1),_vm._v(" "),_c('b-tab',{attrs:{"title":"about","href":"#about"}},[_c('taxonomy-metadata',_vm._b({},'taxonomy-metadata',_vm.taxonomy,false))],1)],1)],1):(_vm.id && !_vm.waiting)?_c('b-col',[_c('div',{staticClass:"alert alert-primary",attrs:{"role":"alert"}},[_vm._v("\n          Wikidata entity with ID "+_vm._s(_vm.id)+" not found (or there was an error)!\n        ")])]):_c('b-col',[_c('div',{staticClass:"card"},[_c('div',{staticClass:"card-body"},[_c('h5',{staticClass:"card-title"},[_vm._v("\n              Welcome to the wikidata-taxonomy web application\n            ")]),_vm._v(" "),_c('p',[_vm._v("\n              Please provide the identifier of a Wikidata root item or property!\n            ")]),_vm._v(" "),_c('p',[_vm._v("Examples:")]),_vm._v(" "),_c('ul',[_c('li',[_c('a',{attrs:{"href":"?id=Q17362350"}},[_vm._v("planet of the solar system")])]),_vm._v(" "),_c('li',[_c('a',{attrs:{"href":"?id=Q732577"}},[_vm._v("publication types")]),_vm._v(" (long list, takes a moment)")])]),_vm._v(" "),_c('p',[_vm._v("\n              Extended functionality is available via the \n              "),_c('a',{attrs:{"href":"https://wdtaxonomy.readthedocs.io/en/latest/"}},[_vm._v("wikidata-taxonomy command line client")]),_vm._v(".\n            ")])])])])],1)],1)],1)}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);

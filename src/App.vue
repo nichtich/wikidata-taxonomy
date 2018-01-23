@@ -18,38 +18,55 @@
           </b-navbar-nav>
 
         </b-collapse>
-      </b-navbar>
+    </b-navbar>
 
-      <b-container fluid v-if="taxonomy">
-        <b-row>
-          <b-col>
-            <b-tabs>
-              <b-tab title="tree" href="#tree" active>
-                <jskos-tree v-bind="taxonomy"></jskos-tree>
-              </b-tab>
-              <b-tab title="text" href="#text">
-                <serialized-taxonomy :taxonomy="taxonomy"></serialized-taxonomy>
-              </b-tab>
-              <b-tab title="data" href="#data">
-                <tree-view :data="taxonomy"></tree-view>
-              </b-tab>
-              <b-tab title="about" href="#about">
-                <taxonomy-metadata v-bind="taxonomy"></taxonomy-metadata>
-              </b-tab>
-            </b-tabs>  
-          </b-col>
-        </b-row>
-      </b-container>
-
-      <b-container fluid v-else>
-        <b-row>
-          <b-col>
-            <div class="alert alert-primary" role="alert">
-              Wikidata entity with ID {{id}} not found (or there was an error)!
+    <b-container fluid>
+      <b-row>
+        <b-col v-if="taxonomy">
+          <b-tabs>
+            <b-tab title="tree" href="#tree" active>
+              <jskos-tree v-bind="taxonomy"></jskos-tree>
+            </b-tab>
+            <b-tab title="text" href="#text">
+              <serialized-taxonomy :taxonomy="taxonomy"></serialized-taxonomy>
+            </b-tab>
+            <b-tab title="data" href="#data">
+              <tree-view :data="taxonomy"></tree-view>
+            </b-tab>
+            <b-tab title="about" href="#about">
+              <taxonomy-metadata v-bind="taxonomy"></taxonomy-metadata>
+            </b-tab>
+          </b-tabs>  
+        </b-col>
+        <b-col v-else-if="id && !waiting">
+          <div class="alert alert-primary" role="alert">
+            Wikidata entity with ID {{id}} not found (or there was an error)!
+          </div>
+        </b-col>
+        <b-col v-else>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">
+                Welcome to the wikidata-taxonomy web application
+              </h5>
+              <p>
+                Please provide the identifier of a Wikidata root item or property!
+              </p>
+              <p>Examples:</p>
+              <ul>
+                <li><a href="?id=Q17362350">planet of the solar system</a></li>
+                <!--li><a href="?id=P170">creator types</a> (Wikidata properties)</li-->
+                <li><a href="?id=Q732577">publication types</a> (long list, takes a moment)</li>
+              </ul>
+              <p>
+                Extended functionality is available via the 
+                <a href="https://wdtaxonomy.readthedocs.io/en/latest/">wikidata-taxonomy command line client</a>.
+              </p>
             </div>
-          </b-col>
-        </b-row>
-      </b-container>
+          </div>
+        </b-col>
+      </b-row>
+    </b-container>
 
   </div>
 </template>
@@ -82,7 +99,7 @@ export default {
       const vm = this
       console.log("$ wdtaxonomy "+id)
       if (id === undefined || id === '') return
-
+      this.waiting = true
       wdt.queryTaxonomy(id)
       .then(function(taxonomy) {
         vm.taxonomy = taxonomy
@@ -92,6 +109,7 @@ export default {
         vm.taxonomy = undefined
       })
       .finally( (x) => {
+        this.waiting = false
         vm.$forceUpdate()
         console.log(vm.taxonomy)
       })
