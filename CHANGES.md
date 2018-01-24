@@ -2,6 +2,10 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
+# 0.6.7 (2017-01-24)
+
+* Quote CSV as specified in RFC4180 (#41)
+
 # 0.6.6 (2017-01-18)
 
 * Add browserify distribution
