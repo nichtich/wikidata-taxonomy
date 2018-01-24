@@ -1,5 +1,6 @@
 <template>
-  <pre class="bg-dark"><code v-html="serialized"></code></pre>
+  <pre class="bg-dark shell"><code class="text-white">{{command}}
+</code><code v-html="serialized"/></pre>
 </template>
 
 <script>
@@ -10,7 +11,7 @@ function escapeHTML(unsafeText) {
 }
 
 module.exports = {
-  props: ['taxonomy'],
+  props: ['command', 'taxonomy'],
   computed: {
     serialized() {
       // TODO: move to wikidata-taxonomy

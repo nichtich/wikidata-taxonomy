@@ -1,6 +1,6 @@
 @media (max-width: 767px) {
   .container-fluid {
-    padding: 0;
+    padding: 2px;
   }
 }
 
@@ -20,7 +20,11 @@ pre, dl {
   padding: 2px;
 }
 
+pre.shell {
+  line-height: 1;
+}
 
+/* TODO: move to component */
 ul.jskos-tree {
   margin: 0px;
   padding: 10px;
@@ -35,7 +39,7 @@ ul.jskos-tree li {
   list-style: none;
 }
 
-ul.jskos-tree li:before{
+ul.jskos-tree li:before {
   position: absolute;
   left: -15px;
   top: 0px;
@@ -47,7 +51,15 @@ ul.jskos-tree li:before{
   width: 10px;
 }
 
-ul.jskos-tree li:after{
+ul.jskos-tree li.instance:before {
+  border-bottom: 1px dotted #ddd;
+}
+
+li.instance {
+  font-style: italic;
+}
+
+ul.jskos-tree li:after {
   position: absolute;
   left: -15px;
   bottom: -7px;

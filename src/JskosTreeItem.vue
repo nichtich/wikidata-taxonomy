@@ -1,9 +1,12 @@
 <template>
   <div>
-    <jskos-item v-bind="fullConcept(concept)"></jskos-item>
-    <ul v-if="(fullConcept(concept).narrower||[]).length">
-      <li v-for="child in fullConcept(concept).narrower">
-        <jskos-tree-item :conceptIndex="conceptIndex" :concept="fullConcept(child)"></jskos-tree-item>
+    <jskos-item v-bind="fullConcept"></jskos-item>
+    <ul v-if="(fullConcept.subjectOf||[]).length || (fullConcept.narrower||[]).length">
+      <li v-for="instance in fullConcept.subjectOf" class="instance">
+        <jskos-item v-bind="expandConcept(instance)"></jskos-item>
+      </li>
+      <li v-for="child in fullConcept.narrower">
+        <jskos-tree-item :conceptIndex="conceptIndex" :concept="child"></jskos-tree-item>
       </li>
     </ul>
   </div>
@@ -19,9 +22,14 @@
   	name: 'jskos-tree-item',
     props: ['concept', 'conceptIndex'],
     methods: {
-      fullConcept: function(concept) {
+      expandConcept: function(concept) {
         return this.conceptIndex[concept.uri] || concept
       }
     },
+    computed: {
+      fullConcept: function() {
+        return this.expandConcept(this.concept)
+      }
+    }
   }
 </script>

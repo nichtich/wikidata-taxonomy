@@ -9,7 +9,7 @@
 
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
         <b-collapse is-nav id="nav_collapse">
-
+          <b-form-select class="col-4" v-model="instances" :options="instanceOptions"/>
           <b-navbar-nav class="ml-auto">
             <b-nav-item-dropdown text="wikidata-taxonomy" right>
               <b-dropdown-item href="https://github.com/nichtich/wikidata-taxonomy">source code</b-dropdown-item>
@@ -27,11 +27,12 @@
             <b-tab title="tree" href="#tree" active>
               <jskos-tree v-bind="taxonomy"></jskos-tree>
             </b-tab>
-            <b-tab title="text" href="#text">
-              <serialized-taxonomy :taxonomy="taxonomy"></serialized-taxonomy>
+            <b-tab title="command line" href="#text">
+              <serialized-taxonomy :taxonomy="taxonomy" :command="command"></serialized-taxonomy>
             </b-tab>
             <b-tab title="data" href="#data">
               <tree-view :data="taxonomy"></tree-view>
+              <p>See <a href="https://gbv.github.io/jskos/jskos.html">JSKOS format</a> for documentation.</p>
             </b-tab>
             <b-tab title="about" href="#about">
               <taxonomy-metadata v-bind="taxonomy"></taxonomy-metadata>
@@ -85,22 +86,59 @@ export default {
     TaxonomyMetadata,
     SerializedTaxonomy
   },
+  data () {
+    return {
+      instances: '',
+      instanceOptions: [
+        { value: '', text: 'no instances' },
+        //{ value: 'count', text: 'count instances' },
+        { value: 'include', text: 'include instances' },
+      ]
+    }
+  },
   created: function () { 
     this.id = this.$route.query.id
+    this.instances = this.$route.query.instances || ''
     this.query()
+  },
+  watch: {
+    instances: function() {
+      this.submit()
+    }
   },
   methods: {
     submit: function () {
-      this.$router.push({query:{id: this.id}})
+      var query = {id: this.id}
+      if (this.instances !== '') query.instances = this.instances
+      this.$router.push({query})
       this.query()
     },
     query: function () {
-      const id = this.id
       const vm = this
-      console.log("$ wdtaxonomy "+id)
-      if (id === undefined || id === '') return
+      const { id, instances } = vm
+      if (id === undefined || id === '') {
+        vm.taxonomy = undefined
+        return
+      }
+
+      // TODO: change internal options?
+      var command = '$ wdtaxonomy '
+      var options = {}
+      if (instances) {
+        //if (instances === 'count') {
+        //  options.instancecount = true
+        //} else {
+          options.instances = true
+          command += '-i '
+        //}
+      } else {
+        command += '-b '
+      }
+
+      vm.command = command + id
+
       this.waiting = true
-      wdt.queryTaxonomy(id)
+      wdt.queryTaxonomy(id, options)
       .then(function(taxonomy) {
         vm.taxonomy = taxonomy
       })
