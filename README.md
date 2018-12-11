@@ -74,7 +74,7 @@ The extracted taxonomy by default is based on statements using the property "sub
 
 **Direct subclasses of planet ([Q634]) with description and mappings:**
 
-    $ wdtaxonomy.js Q634 -c -d -m =
+    $ wdtaxonomy Q634 -c -d -m =
 
 The hierarchy properties [P279] ("subclass of") and [P31] ("instance of") to build taxonomies from can be changed with option `property` (`-P`).
 
@@ -113,7 +113,7 @@ A taxonomy of subproperties can be queried like taxonomies of items. The hierarc
 
     $ wdtaxonomy P361 -P P1647/P1696
 
-Inverse properties are neither factored in so queries like these do not necesarrily return the same results:
+Inverse properties are neither factored in so queries like these do not necessarily return the same results:
 
 **What hand ([Q33767]) is part of ([P361]):**
 
