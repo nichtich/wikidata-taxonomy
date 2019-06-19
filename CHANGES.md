@@ -2,16 +2,17 @@
 
 This changelog tracks features and fixes of [wikidata-taxonomy](https://www.npmjs.com/package/wikidata-taxonomy).
 
-# 0.6.7 (2017-01-24)
+# 0.6.7 (2019-06-19)
 
+* Add user-agent to follow Wikimedia user-agent policy
 * Quote CSV as specified in RFC4180 (#41)
 
-# 0.6.6 (2017-01-18)
+# 0.6.6 (2018-01-18)
 
 * Add browserify distribution
 * Extend documentation
 
-# 0.6.5 (2017-01-09)
+# 0.6.5 (2018-01-09)
 
 * Update dependencies
 
